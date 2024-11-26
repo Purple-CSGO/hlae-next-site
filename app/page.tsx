@@ -6,25 +6,25 @@ import { FaGithub } from 'react-icons/fa'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen mx-auto flex-col gap-24 py-28 row-start-2 items-center justify-center sm:items-start">
-      <section className="flex flex-col items-center text-center mx-auto py-8 px-8">
+    <main className="flex flex-col items-center justify-center min-h-screen row-start-2 gap-20 py-32 mx-auto sm:items-start">
+      <section className="flex flex-col items-center w-full max-w-screen-lg px-8 py-8 mx-auto text-center">
         <H1>HLAE中文站</H1>
 
         <Hero />
       </section>
 
-      <section className="flex flex-col gap-8 items-center justify-center max-w-screen-xl mx-auto px-8 w-full">
+      <section className="flex flex-col items-center justify-center w-full max-w-screen-lg gap-8 px-8 mx-auto">
         <H2>传送门</H2>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center justify-center gap-6 w-full">
+        <ul className="grid items-center justify-center w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {portalData.map((data, index) => (
             <Card {...data} key={index} />
           ))}
         </ul>
       </section>
 
-      <section className="flex flex-col gap-8 items-center justify-center max-w-screen-xl mx-auto px-8 w-full">
+      <section className="flex flex-col items-center justify-center w-full max-w-screen-lg gap-8 px-8 mx-auto">
         <H2>资源下载</H2>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center justify-center gap-6 w-full">
+        <ul className="grid items-center justify-center w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {resourceData.map((data, index) => (
             <Card {...data} key={index} />
           ))}

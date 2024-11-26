@@ -5,7 +5,7 @@ export const resourceData: CardProps[] = [
     title: 'HLAE',
     url: 'https://github.com/advancedfx/advancedfx',
     desc: '起源游戏影片制作工具',
-    background: true,
+    background: false,
     download_cdn: 'https://api.upup.cool/get/hlae',
     download_original: 'https://github.com/advancedfx/advancedfx/releases/latest',
     image: '/icon/hlae.png',
@@ -36,6 +36,7 @@ export const resourceData: CardProps[] = [
     download_cdn: 'https://api.upup.cool/get/csdm',
     download_original: 'https://github.com/akiver/CS-Demo-Manager/releases/latest',
     image: '/icon/csdm.svg',
+    className: 'm-2',
   },
   {
     title: 'CSGO工具箱',
@@ -92,7 +93,7 @@ export const resourceData: CardProps[] = [
     image: '/icon/voukoder.png',
   },
   {
-    title: 'ReShade_advancedfx',
+    title: 'ReShade AFX',
     url: 'https://github.com/advancedfx/ReShade_advancedfx',
     desc: '连接HLAE录制的ReShade插件',
     background: false,

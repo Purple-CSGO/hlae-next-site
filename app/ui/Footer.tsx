@@ -1,7 +1,7 @@
 export function Footer() {
   return (
     <footer className="bg-zinc-100 border-t border-zinc-200 text-zinc-700 py-8 px-5 w-full">
-      <div className="max-w-screen-xl gap-3 mx-auto flex flex-col justify-between items-center">
+      <div className="max-w-screen-lg gap-3 mx-auto flex flex-col justify-between items-center">
         <span className="font-medium tracking-wider text-zinc-500">
           Presented by{' '}
           <a href="https://github.com/Purple-CSGO" className="font-bold text-zinc-700">

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "ahooks": "^3.8.1",
     "class-variance-authority": "^0.7.0",
     "next": "15.0.3",
     "primeicons": "^7.0.0",
