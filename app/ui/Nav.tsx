@@ -4,8 +4,12 @@ import { H4 } from './Heading'
 import { useScroll } from 'ahooks'
 import { twMerge } from 'tailwind-merge'
 
-export function Nav() {
-  const scroll = useScroll(document)
+function isBrowser() {
+  return !!(typeof window !== 'undefined' && window.document && window.document.createElement)
+}
+
+export default function Nav() {
+  const scroll = useScroll(isBrowser() ? document : null)
 
   return (
     <nav

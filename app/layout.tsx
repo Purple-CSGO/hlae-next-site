@@ -3,8 +3,8 @@ import localFont from 'next/font/local'
 import './globals.css'
 import 'primeicons/primeicons.css'
 
-import { Nav } from './ui/Nav'
-import { Footer } from './ui/Footer'
+import Nav from './ui/Nav'
+import Footer from './ui/Footer'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',

@@ -1,7 +1,7 @@
-export function Footer() {
+export default function Footer() {
   return (
-    <footer className="bg-zinc-100 border-t border-zinc-200 text-zinc-700 py-8 px-5 w-full">
-      <div className="max-w-screen-lg gap-3 mx-auto flex flex-col justify-between items-center">
+    <footer className="w-full px-5 py-8 border-t bg-zinc-100 border-zinc-200 text-zinc-700">
+      <div className="flex flex-col items-center justify-between max-w-screen-lg gap-3 mx-auto">
         <span className="font-medium tracking-wider text-zinc-500">
           Presented by{' '}
           <a href="https://github.com/Purple-CSGO" className="font-bold text-zinc-700">
@@ -28,7 +28,7 @@ function Beian({ record, icp }: BeianProps) {
         <img src="/icon/beian.png" alt="beian" className="w-4 h-4" />
         {record}
       </a>
-      <span className="sm:block hidden">|</span>
+      <span className="hidden sm:block">|</span>
       <a href="http://beian.miit.gov.cn/" target="_blank" className="hover:underline">
         {icp}
       </a>
