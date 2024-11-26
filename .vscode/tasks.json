@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Docker Build",
+      "type": "shell",
+      "command": "docker build --platform linux/amd64 -t purp1e/hlae-next-site:latest .",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Docker Push",
+      "type": "shell",
+      "command": "docker push purp1e/hlae-next-site:latest",
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}
