@@ -1,10 +1,11 @@
 import Link from 'next/link'
+import { H4 } from './Heading'
 
 export function Nav() {
   return (
-    <nav className="absolute top-0 bg-white/70 backdrop-blur w-full">
+    <nav className="sticky top-0 bg-white/80 backdrop-blur-lg w-full">
       <div className="flex items-center justify-between gap-4 max-w-screen-xl mx-auto px-8 py-6 w-full">
-        <span className="font-bold">HLAE中文站</span>
+        <H4 className="font-bold">HLAE中文站</H4>
 
         <ul className="flex items-center gap-4">
           <Link href="/" className="text-md font-semibold text-gray-800">
