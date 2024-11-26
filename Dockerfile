@@ -2,13 +2,18 @@
 # see all versions at https://hub.docker.com/r/oven/bun/tags
 FROM oven/bun:1 AS base
 
-# 构建
-FROM base AS build-stage
+# 依赖
+FROM base AS dependency-stage
 WORKDIR /app
 COPY package.json bun.lockb ./
 RUN bun install --frozen-lockfile --registry=https://registry.npmmirror.com
 
+# 构建
+FROM base AS build-stage
+WORKDIR /app
 ENV NODE_ENV=production
+COPY . .
+COPY --from=dependency-stage /app/node_modules /app/node_modules
 RUN bun test
 RUN bun run build
 
