@@ -41,7 +41,7 @@ export const resourceData: CardProps[] = [
   {
     title: 'CSGO工具箱',
     url: 'https://csgo-toolbox.upup.cool',
-    desc: '一个为CSGO游戏的各个方面带来便利的工具集合',
+    desc: '一个为CSGO游戏各个方面带来便利的工具集合',
     background: true,
     download_cdn: 'https://api.upup.cool/get/csgo-toolbox',
     download_original: 'https://github.com/One-Studio/CSGO-Toolbox/releases/latest',

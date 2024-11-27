@@ -54,7 +54,7 @@ function Hero() {
         <a
           href="https://github.com/Purple-CSGO/hlae-next-site"
           target="_blank"
-          className="pl-3 pr-4 py-2 flex flex-row justify-center items-center rounded-full font-semibold transition duration-200 active:scale-95 text-[#333] dark:text-[#222] bg-gray-100 dark:bg-gray-300 hover:bg-gray-200"
+          className="pl-3 pr-4 py-2 flex flex-row justify-center items-center rounded-full font-semibold transition duration-200 active:scale-95 text-[#333] bg-gray-100 hover:bg-gray-200"
         >
           <FaGithub className="w-6 h-6 p-0.5 mr-1" />
           本项目

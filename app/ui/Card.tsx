@@ -19,8 +19,8 @@ export interface CardProps {
 
 export function Card({ title, url, desc, icon, version, background, download_cdn, download_original, image, className, children }: CardProps) {
   return (
-    <li className="p-5 gap-3 rounded-xl bg-[#f6f6f6] hover:bg-[#f1f1f1] bg-opacity-90 transition duration-200 flex flex-col h-full dark:bg-[#333] dark:hover:bg-[#666]">
-      <Link href={url} className="flex items-center gap-1 w-fit">
+    <li className="p-5 gap-3 rounded-xl bg-zinc-100 hover:brightness-95 bg-opacity-90 transition duration-200 flex flex-col h-full">
+      <Link href="/" className="flex items-center gap-1">
         <div className={twMerge('w-12 h-12 shrink-0 rounded-xl mr-2 flex justify-center items-center', background && 'bg-zinc-200')}>
           {icon && <i className={twMerge('text-2xl', icon)} />}
           {image && !icon && <img src={image} className={twMerge('rounded-xl', className)} />}
