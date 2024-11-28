@@ -12,6 +12,7 @@
     "@formkit/auto-animate": "^0.8.2",
     "ahooks": "^3.8.1",
     "class-variance-authority": "^0.7.0",
+    "html2canvas": "^1.4.1",
     "next": "15.0.3",
     "primeicons": "^7.0.0",
     "react": "19.0.0-rc-66855b96-20241106",

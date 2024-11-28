@@ -1,12 +1,11 @@
+import { H2 } from '../ui/Heading'
+
 export default function About() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 px-8">
-      <h1 className="text-4xl font-bold mb-4">About</h1>
-      <p className="text-lg mb-4">
-        This is a simple React app that uses Next.js and Tailwind CSS to create a responsive website. The app includes a navigation bar, a hero section, and a
-        footer. The hero section includes a background image and a description of the app. The navigation bar includes links to the home page and the about
-        page. The footer includes a copyright notice and a link to the GitHub repository.
-      </p>
+    <div className="flex flex-col gap-2 text-zinc-900 dark:text-zinc-100 items-center justify-start min-h-screen max-w-screen-lg mx-auto py-32 px-8">
+      <H2 className="mb-4">关于</H2>
+      <p>HLAE中文站 —— CS视频制作相关导航与资源集合的中文门户网站。</p>
+      <p>创办&开发：Purp1e紫</p>
     </div>
   )
 }

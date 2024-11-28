@@ -21,9 +21,11 @@ export default function Nav() {
       )}
     >
       <div className="flex items-center justify-between w-full max-w-screen-lg gap-4 px-8 py-6 mx-auto">
-        <H4 className="font-bold">HLAE中文站</H4>
+        <Link href="/">
+          <H4 className="font-bold">HLAE中文站</H4>
+        </Link>
 
-        <ul className="flex items-center gap-4">
+        <ul className="flex items-center gap-6">
           <Link href="/" className="font-semibold text-zinc-900 dark:text-zinc-100 text-md">
             主页
           </Link>

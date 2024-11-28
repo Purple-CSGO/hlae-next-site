@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { DeathMsg, DefaultDeathMsgs } from './dmsg'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import html2canvas from 'html2canvas'
 
 interface DMState {
   w: number
@@ -19,6 +20,7 @@ interface DMState {
   resetDNotices: () => void
   saveDNotices: () => void
   loadDNotices: (json: string) => void
+  generateDNotice: () => void
 }
 
 // 创建 store
@@ -28,7 +30,7 @@ const useDMStore = create<DMState>()(
       w: 1920,
       h: 1080,
       hidpi: 2,
-      prefix: '测试击杀生成',
+      prefix: '击杀生成-',
       dNotices: DefaultDeathMsgs,
       setW: (w: number) => set({ w }),
       setH: (h: number) => set({ h }),
@@ -56,6 +58,56 @@ const useDMStore = create<DMState>()(
         // 弹出文件上传对话框
         // set({ dNotices: JSON.parse(json).dNotices })
       },
+      generateDNotice: async () => {
+        const { w, h, hidpi, prefix, dNotices } = get()
+
+        // html2canvas获取元素、生成图片、并跳转下载
+        const e = document.getElementById('deathnotice')
+        if (e === null) return
+
+        const dpi = hidpi ? hidpi : 1 // 缩放倍率，不随浏览器缩放改变
+
+        for (let i = 0; i < dNotices.length; i++) {
+          // 隐藏其他击杀条
+          for (let j = 0; j < dNotices.length; j++) {
+            get().setDNotice(j, { ...dNotices[j], hide: j !== i })
+          }
+
+          await sleep(50)
+
+          // 滚动条置顶解决生成图片不全的问题
+          window.scrollY = 0
+          document.documentElement.scrollTop = 0
+          document.documentElement.scrollLeft = 0
+          document.body.scrollTop = 0
+          const canvas: HTMLCanvasElement = await html2canvas(e, {
+            allowTaint: false,
+            useCORS: false,
+            backgroundColor: 'rgba(0,0,0,0)',
+            scale: dpi,
+          })
+          const dataURL = canvas.toDataURL('image/png')
+          if (dataURL !== '') {
+            const link = document.createElement('a')
+            const context = canvas.getContext('2d')
+            if (context === null) return
+
+            // [重要]关闭抗锯齿
+            // context.imageSmoothingEnabled = false;
+            link.href = canvas.toDataURL()
+            link.setAttribute('download', prefix + i + '.png')
+            link.style.display = 'none'
+
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          }
+        }
+
+        for (let j = 0; j < dNotices.length; j++) {
+          dNotices[j].hide = false
+        }
+      },
     }),
     {
       name: 'deathmsg',
@@ -63,5 +115,11 @@ const useDMStore = create<DMState>()(
     }
   )
 )
+
+function sleep(time: number) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time)
+  })
+}
 
 export default useDMStore

@@ -7,7 +7,7 @@ export type DeathMsg = {
   prefixIcons: prefixIcon[]
   suffixIcons: suffixIcon[]
   redBorder: boolean
-  hide: boolean
+  hide?: boolean
 }
 
 export const DefaultDeathMsgs: DeathMsg[] = [

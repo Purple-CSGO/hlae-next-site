@@ -10,16 +10,18 @@ export default function DeathMessage() {
   return (
     <div className="flex flex-col items-center w-full max-w-screen-lg gap-8 px-8 py-8 mx-auto">
       <H2>击杀信息生成</H2>
-      <ul className="flex flex-row gap-4 text-zinc-900 dark:text-zinc-100">
+      {/* <ul className="flex flex-row gap-4 text-zinc-900 dark:text-zinc-100">
         <li>CS1.6</li>
         <li>CSGO</li>
         <li>CS2</li>
-      </ul>
+      </ul> */}
+      <p className="text-zinc-900 dark:text-zinc-100">施工中... 功能尚未完善</p>
       <div className="flex flex-row flex-wrap gap-6 pt-4">
         <SettingPanel />
         <PreviewPanel />
         <DeathNoticePanel />
       </div>
+      <DeathNoticeCanvas />
     </div>
   )
 }
@@ -69,43 +71,21 @@ export function SettingPanel() {
 }
 
 export function PreviewPanel() {
-  const { dNotices } = useDMStore()
-  const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
-
   return (
     <section className="flex flex-col flex-grow gap-6 p-6 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white/[.01] text-zinc-900 dark:text-zinc-100">
       <H3>预览</H3>
-      <div className="flex flex-col items-end gap-0.5 pr-2.5 transition-transform" ref={parent}>
-        {dNotices.map((dNotice: DeathMsg, index: number) => (
-          <div
-            key={index}
-            className={twMerge(
-              'flex flex-row items-center gap-1 px-2 py-1 text-base font-bold font-[Stratum2] rounded text-white bg-black/65',
-              dNotice.redBorder && 'border-2 border-[#e10000]'
-            )}
-          >
-            <p className={twMerge(dNotice.attackerCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.attacker}</p>
-            {dNotice.prefixIcons &&
-              dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/dnFix/${prefixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
-            <img src={`/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
-            {dNotice.suffixIcons &&
-              dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/dnFix/${suffixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
-
-            <p className={twMerge(dNotice.victimCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.victim}</p>
-          </div>
-        ))}
-      </div>
+      <DeathNoticeRender />
     </section>
   )
 }
 
 export function DeathNoticePanel() {
-  const { dNotices, setDNotice, saveDNotices, loadDNotices, resetDNotices, addDNotice } = useDMStore()
+  const { dNotices, setDNotice, saveDNotices, loadDNotices, resetDNotices, addDNotice, generateDNotice } = useDMStore()
   const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
 
   return (
     <section className="flex flex-col w-full gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
-      <div className="flex gap-6">
+      <div className="flex gap-4">
         <H3>击杀信息调整</H3>
         <button onClick={() => saveDNotices()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
           保存数据
@@ -115,6 +95,9 @@ export function DeathNoticePanel() {
         </button>
         <button onClick={() => resetDNotices()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
           恢复默认
+        </button>
+        <button onClick={() => generateDNotice()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
+          生成击杀
         </button>
         <button onClick={() => addDNotice(DefaultDeathMsg)} className="px-3 py-1 ml-auto font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
           添加
@@ -158,5 +141,50 @@ export function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeI
         删除
       </button>
     </li>
+  )
+}
+
+type DeathNoticeRenderProps = {
+  hide?: boolean
+}
+
+export function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
+  const { dNotices } = useDMStore()
+  const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
+
+  return (
+    <ul className="flex flex-col items-end gap-1 pr-2.5 transition-transform" ref={parent}>
+      {dNotices.map((dNotice: DeathMsg, index: number) => (
+        <li
+          key={index}
+          className={twMerge(
+            'flex flex-row items-center gap-1 px-2 py-1 h-8 text-sm backdrop-blur font-bold font-[Stratum2] rounded text-white bg-black/65',
+            dNotice.redBorder && 'border-2 border-[#e10000]',
+            hide && dNotice.hide && 'invisible'
+          )}
+        >
+          <p className={twMerge(dNotice.attackerCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.attacker}</p>
+          {dNotice.prefixIcons &&
+            dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/dnFix/${prefixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+          <img src={`/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
+          {dNotice.suffixIcons &&
+            dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/dnFix/${suffixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+
+          <p className={twMerge(dNotice.victimCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.victim}</p>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+export function DeathNoticeCanvas() {
+  const { w, h } = useDMStore()
+  const dw = `${w}px`
+  const dh = `${h}px`
+
+  return (
+    <section className={`pt-[72px] pr-[10px] block pointer-events-none absolute bottom-full`} style={{ width: dw, height: dh }} id="deathnotice">
+      <DeathNoticeRender hide={true} />
+    </section>
   )
 }
