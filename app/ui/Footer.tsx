@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="w-full px-5 py-8 border-t bg-zinc-100 border-zinc-200 text-zinc-700">
+    <footer className="w-full px-5 py-8 border-t bg-zinc-100 dark:bg-zinc-950/80 border-zinc-200 dark:border-zinc-700/50 text-zinc-700">
       <div className="flex flex-col items-center justify-between max-w-screen-lg gap-3 mx-auto">
         <span className="font-medium tracking-wider text-zinc-500">
           Presented by{' '}
@@ -23,7 +23,7 @@ type BeianProps = {
 
 function Beian({ record, icp }: BeianProps) {
   return (
-    <div className="text-sm tracking-wider items-center font-medium text-[#333336] underline-offset-2 flex flex-col sm:flex-row gap-2">
+    <div className="text-sm tracking-wider items-center font-medium text-zinc-700 underline-offset-2 flex flex-col sm:flex-row gap-2">
       <a href="https://beian.mps.gov.cn/#/query/webSearch?code=34012302000653" rel="noreferrer" className="flex gap-3 hover:underline" target="_blank">
         <img src="/icon/beian.png" alt="beian" className="w-4 h-4" />
         {record}

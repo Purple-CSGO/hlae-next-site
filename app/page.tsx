@@ -8,13 +8,13 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen row-start-2 gap-20 py-32 mx-auto sm:items-start">
       <section className="flex flex-col items-center w-full max-w-screen-lg px-8 py-8 mx-auto text-center">
-        <H1>HLAE中文站</H1>
+        <H1 className="text-zinc-950 dark:text-zinc-100">HLAE中文站</H1>
 
         <Hero />
       </section>
 
       <section className="flex flex-col items-center justify-center w-full max-w-screen-lg gap-8 px-8 mx-auto">
-        <H2>传送门</H2>
+        <H2 className="text-zinc-950 dark:text-zinc-100">传送门</H2>
         <ul className="grid items-center justify-center w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {portalData.map((data, index) => (
             <Card {...data} key={index} />
@@ -23,7 +23,7 @@ export default function Home() {
       </section>
 
       <section className="flex flex-col items-center justify-center w-full max-w-screen-lg gap-8 px-8 mx-auto">
-        <H2>资源下载</H2>
+        <H2 className="text-zinc-950 dark:text-zinc-100">资源下载</H2>
         <ul className="grid items-center justify-center w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {resourceData.map((data, index) => (
             <Card {...data} key={index} />
@@ -54,7 +54,7 @@ function Hero() {
         <a
           href="https://github.com/Purple-CSGO/hlae-next-site"
           target="_blank"
-          className="pl-3 pr-4 py-2 flex flex-row justify-center items-center rounded-full font-semibold transition duration-200 active:scale-95 text-[#333] bg-gray-100 hover:bg-gray-200"
+          className="pl-3 pr-4 py-2 flex flex-row dark:bg-gray-200 justify-center items-center rounded-full font-semibold transition duration-200 active:scale-95 text-[#333] bg-gray-100 hover:brightness-90"
         >
           <FaGithub className="w-6 h-6 p-0.5 mr-1" />
           本项目
