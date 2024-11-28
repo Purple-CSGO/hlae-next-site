@@ -52,6 +52,7 @@ export const resourceData: CardProps[] = [
     title: 'HLAE Studio',
     url: 'https://github.com/One-Studio/HLAE-Studio',
     desc: 'HLAE环境配置更新工具',
+    version: 'v1.1.0',
     background: true,
     download_cdn: 'https://api.upup.cool/get/hlae-studio',
     download_original: 'https://github.com/One-Studio/HLAE-Studio/releases/latest',

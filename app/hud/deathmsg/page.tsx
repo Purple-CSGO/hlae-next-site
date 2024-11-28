@@ -27,13 +27,13 @@ export function SettingPanel() {
   const { w, h, hidpi, prefix, setW, setH, setHidpi, setPrefix } = useDMStore()
 
   return (
-    <section className="flex gap-6 p-6 border border-white/20 rounded-md bg-white/10 text-zinc-900 dark:text-zinc-100">
+    <section className="flex gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
       <div className="flex flex-col flex-wrap flex-grow gap-3">
         <H3>偏好设置</H3>
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">宽</a>
           <input
-            className="dark:bg-zinc-800 dark:border-white/20 px-2 py-1 border rounded-md bg-zinc-50"
+            className="dark:bg-zinc-800 dark:border-zinc-600 px-2 py-1 border rounded-md bg-zinc-50"
             value={w}
             onChange={e => setW(Number(e.target.value))}
           />
@@ -41,7 +41,7 @@ export function SettingPanel() {
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">高</a>
           <input
-            className="dark:bg-zinc-800 dark:border-white/20 px-2 py-1 border rounded-md bg-zinc-50"
+            className="dark:bg-zinc-800 dark:border-zinc-600 px-2 py-1 border rounded-md bg-zinc-50"
             value={h}
             onChange={h => setH(Number(h.target.value))}
           />
@@ -49,7 +49,7 @@ export function SettingPanel() {
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">渲染倍率</a>
           <input
-            className="dark:bg-zinc-800 dark:border-white/20 px-2 py-1 border rounded-md bg-zinc-50"
+            className="dark:bg-zinc-800 dark:border-zinc-600 px-2 py-1 border rounded-md bg-zinc-50"
             value={hidpi}
             onChange={hidpi => setHidpi(Number(hidpi.target.value))}
           />
@@ -57,7 +57,7 @@ export function SettingPanel() {
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">文件名前缀</a>
           <input
-            className="dark:bg-zinc-800 dark:border-white/20 px-2 py-1 border rounded-md bg-zinc-50"
+            className="dark:bg-zinc-800 dark:border-zinc-600 px-2 py-1 border rounded-md bg-zinc-50"
             value={prefix}
             onChange={prefix => setPrefix(String(prefix.target.value))}
           />
@@ -71,9 +71,9 @@ export function PreviewPanel() {
   const { dNotices } = useDMStore()
 
   return (
-    <div className="flex flex-col flex-grow gap-6 p-6 border border-white/20 rounded-md bg-white/10 text-zinc-900 dark:text-zinc-100">
+    <section className="flex flex-col flex-grow gap-6 p-6 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white/[.01] text-zinc-900 dark:text-zinc-100">
       <H3>预览</H3>
-      <div className="flex flex-col items-end gap-0.5 pr-2.5 ">
+      <div className="flex flex-col items-end gap-0.5 pr-2.5 transition-transform">
         {dNotices.map((dNotice: DeathMsg, index: number) => (
           <div
             key={index}
@@ -93,7 +93,7 @@ export function PreviewPanel() {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   )
 }
 
@@ -101,7 +101,7 @@ export function DeathNoticePanel() {
   const { dNotices, setDNotice, saveDNotices, loadDNotices, resetDNotices, addDNotice } = useDMStore()
 
   return (
-    <div className="flex flex-col w-full gap-6 p-6 border border-white/20 rounded-md bg-white/10 text-zinc-900 dark:text-zinc-100">
+    <section className="flex flex-col w-full gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
       <div className="flex gap-6">
         <H3>击杀信息调整</H3>
         <button onClick={() => saveDNotices()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
@@ -122,7 +122,7 @@ export function DeathNoticePanel() {
           <DeathNoticeItem key={i} index={i} deathNotice={dNotice} setDNotice={setDNotice} />
         ))}
       </ul>
-    </div>
+    </section>
   )
 }
 
@@ -135,16 +135,16 @@ export function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeI
   const { removeDNotice } = useDMStore()
 
   return (
-    <li className="flex flex-row flex-wrap items-center gap-2 p-4 border rounded-md dark:border-white/40">
+    <li className="flex flex-row flex-wrap items-center gap-2 p-4 border rounded-md dark:border-zinc-600">
       <p>击杀者</p>
       <input
-        className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-white/20"
+        className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
         value={deathNotice.attacker}
         onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })}
       />
       <p>受害者</p>
       <input
-        className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-white/20"
+        className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
         value={deathNotice.victim}
         onChange={e => setDNotice(index, { ...deathNotice, victim: e.target.value })}
       />
