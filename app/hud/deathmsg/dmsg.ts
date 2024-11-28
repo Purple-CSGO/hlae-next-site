@@ -10,7 +10,7 @@ export type DeathMsg = {
   hide: boolean
 }
 
-export const DefaultDeathMsg: DeathMsg[] = [
+export const DefaultDeathMsgs: DeathMsg[] = [
   {
     attacker: 'Attacker',
     attackerCamp: 'T',
@@ -34,6 +34,8 @@ export const DefaultDeathMsg: DeathMsg[] = [
     hide: false,
   },
 ]
+
+export const DefaultDeathMsg = DefaultDeathMsgs[0]
 
 export type Camp = 'CT' | 'T' | ''
 
