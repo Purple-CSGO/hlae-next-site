@@ -1,12 +1,13 @@
 'use client'
 
 import { H2, H3 } from '@/app/ui/Heading'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import React from 'react'
+import { twMerge } from 'tailwind-merge'
 import { DeathMsg, DefaultDeathMsg } from './dmsg'
 import useDMStore from './store'
-import { twMerge } from 'tailwind-merge'
-import { useAutoAnimate } from '@formkit/auto-animate/react'
 
-export default function DeathMessage() {
+export default function Page() {
   return (
     <div className="flex flex-col items-center w-full max-w-screen-lg gap-8 px-8 py-8 mx-auto">
       <H2>击杀信息生成</H2>
@@ -26,7 +27,7 @@ export default function DeathMessage() {
   )
 }
 
-export function SettingPanel() {
+function SettingPanel() {
   const { w, h, hidpi, prefix, setW, setH, setHidpi, setPrefix } = useDMStore()
 
   return (
@@ -70,7 +71,7 @@ export function SettingPanel() {
   )
 }
 
-export function PreviewPanel() {
+function PreviewPanel() {
   return (
     <section className="flex flex-col flex-grow gap-6 p-6 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white/[.01] text-zinc-900 dark:text-zinc-100">
       <H3>预览</H3>
@@ -79,7 +80,7 @@ export function PreviewPanel() {
   )
 }
 
-export function DeathNoticePanel() {
+function DeathNoticePanel() {
   const { dNotices, setDNotice, saveDNotices, loadDNotices, resetDNotices, addDNotice, generateDNotice } = useDMStore()
   const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
 
@@ -117,7 +118,7 @@ type DeathNoticeItemProps = {
   deathNotice: DeathMsg
   setDNotice: (index: number, dNotice: DeathMsg) => void
 }
-export function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProps) {
+function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProps) {
   const { removeDNotice } = useDMStore()
 
   return (
@@ -148,7 +149,7 @@ type DeathNoticeRenderProps = {
   hide?: boolean
 }
 
-export function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
+function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
   const { dNotices } = useDMStore()
   const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
 
@@ -177,7 +178,7 @@ export function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
   )
 }
 
-export function DeathNoticeCanvas() {
+function DeathNoticeCanvas() {
   const { w, h } = useDMStore()
   const dw = `${w}px`
   const dh = `${h}px`

@@ -38,9 +38,9 @@ const useDMStore = create<DMState>()(
       setPrefix: (prefix: string) => set({ prefix }),
       setDNotices: (dNotices: DeathMsg[]) => set({ dNotices }),
       setDNotice: (index: number, dNotice: DeathMsg) =>
-        set((state: any) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] })),
-      addDNotice: (dNotice: DeathMsg) => set((state: any) => ({ dNotices: [...state.dNotices, dNotice] })),
-      removeDNotice: (index: number) => set((state: any) => ({ dNotices: state.dNotices.filter((_: any, i: number) => i !== index) })),
+        set((state: DMState) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] })),
+      addDNotice: (dNotice: DeathMsg) => set((state: DMState) => ({ dNotices: [...state.dNotices, dNotice] })),
+      removeDNotice: (index: number) => set((state: DMState) => ({ dNotices: state.dNotices.filter((_, i: number) => i !== index) })),
       resetDNotices: () => set({ dNotices: DefaultDeathMsgs }),
       saveDNotices: () => {
         const jsonData = JSON.stringify({ dNotices: get().dNotices })
