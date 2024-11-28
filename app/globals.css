@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Stratum2';
+  src: url('./fonts/Stratum2.ttf');
+  font-style: normal;
+  font-weight: bold;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }

@@ -61,16 +61,16 @@ export function PreviewPanel() {
         {dNotices.map((dNotice: DeathMsg, index: number) => (
           <div
             key={index}
-            className={twMerge('flex flex-row gap-1 px-2 py-1 text-sm rounded text-zinc-400 bg-black/10', dNotice.redBorder && 'border-2 border-red-500')}
+            className={twMerge(
+              'flex flex-row gap-1 px-2 py-1 text-md font-bold font-[Stratum2] rounded text-white bg-black/65',
+              dNotice.redBorder && 'border-2 border-[#e10000]'
+            )}
           >
-            <p>{dNotice.attacker}</p>
-            <p>{dNotice.attackerCamp}</p>
-            <p>{dNotice.victim}</p>
-            <p>{dNotice.victimCamp}</p>
+            <p className={twMerge(dNotice.attackerCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.attacker}</p>
             <p>{dNotice.weapon}</p>
-            <p>{dNotice.redBorder}</p>
             <p>{dNotice.prefixIcons}</p>
             <p>{dNotice.suffixIcons}</p>
+            <p className={twMerge(dNotice.victimCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.victim}</p>
           </div>
         ))}
       </div>
@@ -82,7 +82,7 @@ export function DeathNoticePanel() {
   const { dNotices, setDNotice, saveDNotices } = useDMStore()
 
   return (
-    <div className="flex flex-col w-full gap-6 p-6 border rounded-md">
+    <div className="flex flex-col w-full gap-6 p-6 border border-black/20 rounded-md bg-black/10">
       <div className="flex gap-6">
         <H3>击杀信息调整</H3>
         <button onClick={() => saveDNotices()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
