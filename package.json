@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
     "ahooks": "^3.8.1",
     "class-variance-authority": "^0.7.0",
     "next": "15.0.3",

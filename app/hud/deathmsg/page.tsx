@@ -4,6 +4,7 @@ import { H2, H3 } from '@/app/ui/Heading'
 import { DeathMsg, DefaultDeathMsg } from './dmsg'
 import useDMStore from './store'
 import { twMerge } from 'tailwind-merge'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 export default function DeathMessage() {
   return (
@@ -69,11 +70,12 @@ export function SettingPanel() {
 
 export function PreviewPanel() {
   const { dNotices } = useDMStore()
+  const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
 
   return (
     <section className="flex flex-col flex-grow gap-6 p-6 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white/[.01] text-zinc-900 dark:text-zinc-100">
       <H3>预览</H3>
-      <div className="flex flex-col items-end gap-0.5 pr-2.5 transition-transform">
+      <div className="flex flex-col items-end gap-0.5 pr-2.5 transition-transform" ref={parent}>
         {dNotices.map((dNotice: DeathMsg, index: number) => (
           <div
             key={index}
@@ -99,6 +101,7 @@ export function PreviewPanel() {
 
 export function DeathNoticePanel() {
   const { dNotices, setDNotice, saveDNotices, loadDNotices, resetDNotices, addDNotice } = useDMStore()
+  const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
 
   return (
     <section className="flex flex-col w-full gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
@@ -117,7 +120,7 @@ export function DeathNoticePanel() {
           添加
         </button>
       </div>
-      <ul className="flex flex-col gap-6">
+      <ul className="flex flex-col gap-6" ref={parent}>
         {dNotices.map((dNotice: DeathMsg, i: number) => (
           <DeathNoticeItem key={i} index={i} deathNotice={dNotice} setDNotice={setDNotice} />
         ))}
