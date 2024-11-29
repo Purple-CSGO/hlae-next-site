@@ -65,6 +65,13 @@ const useDMStore = create<DMState>()(
         const e = document.getElementById('deathnotice')
         if (e === null) return
 
+        // 生产环境适配
+        const style = document.createElement('style')
+        if (process.env.NODE_ENV === 'production') {
+          document.head.appendChild(style)
+          style.sheet?.insertRule('body > div:last-child img { display: inline-block; }')
+        }
+
         const dpi = hidpi ? hidpi : 1 // 缩放倍率，不随浏览器缩放改变
 
         for (let i = 0; i < dNotices.length; i++) {
@@ -105,8 +112,10 @@ const useDMStore = create<DMState>()(
         }
 
         for (let j = 0; j < dNotices.length; j++) {
-          dNotices[j].hide = false
+          get().setDNotice(j, { ...dNotices[j], hide: false })
         }
+
+        style.remove()
       },
     }),
     {

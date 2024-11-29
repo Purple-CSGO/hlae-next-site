@@ -37,7 +37,7 @@ function SettingPanel() {
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">宽</a>
           <input
-            className="dark:bg-zinc-800 dark:border-zinc-600 px-2 py-1 border rounded-md bg-zinc-50"
+            className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
             value={w}
             onChange={e => setW(Number(e.target.value))}
           />
@@ -45,7 +45,7 @@ function SettingPanel() {
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">高</a>
           <input
-            className="dark:bg-zinc-800 dark:border-zinc-600 px-2 py-1 border rounded-md bg-zinc-50"
+            className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
             value={h}
             onChange={h => setH(Number(h.target.value))}
           />
@@ -53,7 +53,7 @@ function SettingPanel() {
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">渲染倍率</a>
           <input
-            className="dark:bg-zinc-800 dark:border-zinc-600 px-2 py-1 border rounded-md bg-zinc-50"
+            className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
             value={hidpi}
             onChange={hidpi => setHidpi(Number(hidpi.target.value))}
           />
@@ -61,7 +61,7 @@ function SettingPanel() {
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">文件名前缀</a>
           <input
-            className="dark:bg-zinc-800 dark:border-zinc-600 px-2 py-1 border rounded-md bg-zinc-50"
+            className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
             value={prefix}
             onChange={prefix => setPrefix(String(prefix.target.value))}
           />
@@ -159,7 +159,7 @@ function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
         <li
           key={index}
           className={twMerge(
-            'flex flex-row items-center gap-1 px-2 py-1 h-8 text-sm backdrop-blur font-bold font-[Stratum2] rounded text-white bg-black/65',
+            'flex flex-row items-center justify-center gap-1 px-2 py-1 h-8 text-sm leading-6 backdrop-blur font-bold font-[Stratum2] rounded text-white bg-black/65',
             dNotice.redBorder && 'border-2 border-[#e10000]',
             hide && dNotice.hide && 'invisible'
           )}
@@ -184,7 +184,7 @@ function DeathNoticeCanvas() {
   const dh = `${h}px`
 
   return (
-    <section className={`pt-[72px] pr-[10px] block pointer-events-none absolute bottom-full`} style={{ width: dw, height: dh }} id="deathnotice">
+    <section className={`pt-[72px] pr-[10px] pointer-events-none absolute bottom-full render-fix`} style={{ width: dw, height: dh }} id="deathnotice">
       <DeathNoticeRender hide={true} />
     </section>
   )
