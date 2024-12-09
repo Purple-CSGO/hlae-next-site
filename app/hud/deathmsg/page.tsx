@@ -4,8 +4,10 @@ import { H2, H3 } from '@/app/ui/Heading'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
-import { DeathMsg, DefaultDeathMsg, prefixIcon, PrefixIconValues, suffixIcon, SuffixIconValues, Weapon } from './dmsg'
+import { DeathMsg, DefaultDeathMsg, prefixIcon, PrefixIconValues, suffixIcon, SuffixIconValues, Weapon, WeaponValues } from './dmsg'
 import useDMStore from './store'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@radix-ui/react-select'
+import { Button } from '@/components/ui/button'
 
 export default function Page() {
   return (
