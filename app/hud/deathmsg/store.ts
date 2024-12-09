@@ -13,6 +13,7 @@ interface DMState {
   setH: (h: number) => void
   setHidpi: (hidpi: number) => void
   setPrefix: (prefix: string) => void
+  reset: () => void
   setDNotices: (dNotices: DeathMsg[]) => void
   setDNotice: (index: number, dNotice: DeathMsg) => void
   addDNotice: (dNotice: DeathMsg) => void
@@ -36,6 +37,7 @@ const useDMStore = create<DMState>()(
       setH: (h: number) => set({ h }),
       setHidpi: (hidpi: number) => set({ hidpi }),
       setPrefix: (prefix: string) => set({ prefix }),
+      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成-' }),
       setDNotices: (dNotices: DeathMsg[]) => set({ dNotices }),
       setDNotice: (index: number, dNotice: DeathMsg) =>
         set((state: DMState) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] })),

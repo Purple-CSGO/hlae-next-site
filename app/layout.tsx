@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   icons: '/logo2009.svg',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode

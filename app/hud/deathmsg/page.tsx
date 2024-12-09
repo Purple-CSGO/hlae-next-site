@@ -4,7 +4,7 @@ import { H2, H3 } from '@/app/ui/Heading'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
-import { DeathMsg, DefaultDeathMsg } from './dmsg'
+import { DeathMsg, DefaultDeathMsg, prefixIcon, PrefixIconValues, suffixIcon, SuffixIconValues, Weapon } from './dmsg'
 import useDMStore from './store'
 
 export default function Page() {
@@ -28,12 +28,17 @@ export default function Page() {
 }
 
 function SettingPanel() {
-  const { w, h, hidpi, prefix, setW, setH, setHidpi, setPrefix } = useDMStore()
+  const { w, h, hidpi, prefix, setW, setH, setHidpi, setPrefix, reset } = useDMStore()
 
   return (
-    <section className="flex gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
+    <section className="flex gap-6 w-full md:w-auto p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
       <div className="flex flex-col flex-wrap flex-grow gap-3">
-        <H3>偏好设置</H3>
+        <div className="flex gap-4">
+          <H3>偏好设置</H3>
+          <button onClick={() => reset()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
+            重置
+          </button>
+        </div>
         <div className="flex flex-row items-center gap-2">
           <a className="w-20 text-sm">宽</a>
           <input
@@ -86,7 +91,7 @@ function DeathNoticePanel() {
 
   return (
     <section className="flex flex-col w-full gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
-      <div className="flex gap-4">
+      <div className="flex flex-wrap items-start gap-4">
         <H3>击杀信息调整</H3>
         <button onClick={() => saveDNotices()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
           保存数据
@@ -122,25 +127,103 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
   const { removeDNotice } = useDMStore()
 
   return (
-    <li className="flex flex-row flex-wrap items-center gap-2 p-4 border rounded-md dark:border-zinc-600">
-      <p>击杀者</p>
-      <input
-        className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
-        value={deathNotice.attacker}
-        onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })}
-      />
-      <p>受害者</p>
-      <input
-        className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
-        value={deathNotice.victim}
-        onChange={e => setDNotice(index, { ...deathNotice, victim: e.target.value })}
-      />
-      <p>{deathNotice.weapon}</p>
-      <p>{deathNotice.prefixIcons}</p>
-      <p>{deathNotice.suffixIcons}</p>
-      <button onClick={() => removeDNotice(index)} className="px-3 py-1 ml-auto font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
-        删除
-      </button>
+    <li className={twMerge('grid items-center grid-cols-2 gap-4 p-4 border rounded-md md:grid-cols-6 dark:border-zinc-600')}>
+      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
+        <p>击杀者</p>
+        <input
+          className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
+          value={deathNotice.attacker}
+          onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })}
+        />
+      </li>
+      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
+        <p>受害者</p>
+        <input
+          className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
+          value={deathNotice.victim}
+          onChange={e => setDNotice(index, { ...deathNotice, victim: e.target.value })}
+        />
+      </li>
+      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
+        <p>武器</p>
+        <div className="flex gap-3">
+          <input
+            className="flex-grow px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
+            value={deathNotice.weapon}
+            onChange={e => setDNotice(index, { ...deathNotice, weapon: e.target.value as Weapon })}
+          />
+          <button
+            onClick={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
+            className={twMerge(
+              'px-3 py-1 font-semibold transition rounded flex-nowrap bg-zinc-100 border hover:bg-red-400 hover:text-white text-zinc-800',
+              deathNotice.redBorder && 'border-red-500 border bg-red-50'
+            )}
+          >
+            红框
+          </button>
+        </div>
+      </li>
+      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
+        <p>前缀图标</p>
+        <ul className="flex gap-2 rounded-lg">
+          {PrefixIconValues.map(item => (
+            <li
+              key={item}
+              onClick={() =>
+                deathNotice.prefixIcons.includes(item)
+                  ? setDNotice(index, { ...deathNotice, prefixIcons: deathNotice.prefixIcons.filter(i => i !== item) })
+                  : setDNotice(index, { ...deathNotice, prefixIcons: [...deathNotice.prefixIcons, item] })
+              }
+            >
+              <img
+                src={`/dnFix/${item}.svg`}
+                alt="prefix"
+                className={twMerge(
+                  'w-9 h-9 p-1.5 rounded-lg text-black bg-zinc-300 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
+                  deathNotice.prefixIcons.includes(item) && 'bg-zinc-500'
+                )}
+              />
+            </li>
+          ))}
+        </ul>
+      </li>
+      <li className="col-span-3 flex flex-col gap-1.5 flex-grow">
+        <p>后缀图标</p>
+        <ul className="flex gap-2 rounded-lg">
+          {SuffixIconValues.map(item => (
+            <li
+              key={item}
+              onClick={() =>
+                deathNotice.suffixIcons.includes(item)
+                  ? setDNotice(index, { ...deathNotice, suffixIcons: deathNotice.suffixIcons.filter(i => i !== item) })
+                  : setDNotice(index, { ...deathNotice, suffixIcons: [...deathNotice.suffixIcons, item] })
+              }
+            >
+              <img
+                src={`/dnFix/${item}.svg`}
+                alt="suffix"
+                className={twMerge(
+                  'w-9 h-9 p-1.5 rounded-lg text-black bg-zinc-300 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
+                  deathNotice.suffixIcons.includes(item) && 'bg-zinc-500'
+                )}
+              />
+            </li>
+          ))}
+        </ul>
+        {/* <input
+          className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
+          value={deathNotice.suffixIcons}
+          onChange={e => setDNotice(index, { ...deathNotice, suffixIcons: e.target.value as suffixIcon })}
+        /> */}
+      </li>
+      <li className="col-span-1 mt-auto ml-auto space-x-2">
+        <button
+          onClick={() => removeDNotice(index)}
+          className="px-3 py-1 mt-auto ml-auto font-semibold transition rounded bg-zinc-100 hover:bg-red-400 hover:text-white text-zinc-800"
+        >
+          删除
+        </button>
+      </li>
     </li>
   )
 }
