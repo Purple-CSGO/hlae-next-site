@@ -5,6 +5,7 @@ import 'primeicons/primeicons.css'
 
 import Nav from './ui/Nav'
 import Footer from './ui/Footer'
+import { Providers } from './providers'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -31,9 +32,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-zinc-900 overflow-x-hidden`}>
-        <Nav />
-        {children}
-        <Footer />
+        <Providers>
+          <Nav />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   )

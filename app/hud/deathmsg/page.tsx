@@ -2,12 +2,14 @@
 
 import { H2, H3 } from '@/app/ui/Heading'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import React from 'react'
 import { twMerge } from 'tailwind-merge'
-import { DeathMsg, DefaultDeathMsg, prefixIcon, PrefixIconValues, suffixIcon, SuffixIconValues, Weapon, WeaponValues } from './dmsg'
+import { DeathMsg, DefaultDeathMsg, PrefixIconValues, SuffixIconValues, Weapon, WeaponMap, WeaponValues } from './dmsg'
 import useDMStore from './store'
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@radix-ui/react-select'
-import { Button } from '@/components/ui/button'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { ChevronsUpDown, Check } from 'lucide-react'
+import { useState } from 'react'
+import { Button, cn } from '@nextui-org/react'
 
 export default function Page() {
   return (
@@ -129,7 +131,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
   const { removeDNotice } = useDMStore()
 
   return (
-    <li className={twMerge('grid items-center grid-cols-2 gap-4 p-4 border rounded-md md:grid-cols-6 dark:border-zinc-600')}>
+    <ul className="grid items-center grid-cols-1 gap-4 p-4 border rounded-md md:grid-cols-6 dark:border-zinc-600">
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>击杀者</p>
         <input
@@ -149,15 +151,40 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>武器</p>
         <div className="flex gap-3">
-          <input
+          {/* <input
             className="flex-grow px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
             value={deathNotice.weapon}
             onChange={e => setDNotice(index, { ...deathNotice, weapon: e.target.value as Weapon })}
+          /> */}
+          {/* <Select value={deathNotice.weapon} onValueChange={value => setDNotice(index, { ...deathNotice, weapon: value as Weapon })}>
+            <SelectTrigger className="flex-grow px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700">
+              <SelectValue placeholder="武器" />
+            </SelectTrigger>
+            <SelectContent position="popper" sideOffset={10} className="p-1.5 rounded-lg bg-zinc-100">
+              <SelectGroup>
+                {WeaponValues.map(item => (
+                  <SelectItem key={item} value={item} className="py-0.5 px-1 cursor-pointer">
+                    {item}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select> */}
+          {/* <Select className="flex-grow border" label="" labelPlacement="outside">
+            {WeaponValues.map((item, index) => (
+              <SelectItem key={index}>{item}</SelectItem>
+            ))}
+          </Select> */}
+          <SelectSearch
+            value={deathNotice.weapon}
+            values={WeaponValues}
+            valueMap={WeaponMap}
+            onChange={(value: string) => setDNotice(index, { ...deathNotice, weapon: value as Weapon })}
           />
           <button
             onClick={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
             className={twMerge(
-              'px-3 py-1 font-semibold transition rounded flex-nowrap bg-zinc-100 border hover:bg-red-400 hover:text-white text-zinc-800',
+              'px-3 py-1 font-semibold transition rounded flex-nowrap min-w-fit bg-zinc-100 border hover:bg-red-400 hover:text-white text-zinc-800',
               deathNotice.redBorder && 'border-red-500 border bg-red-50'
             )}
           >
@@ -165,8 +192,8 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
           </button>
         </div>
       </li>
-      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
-        <p>前缀图标</p>
+      <li className="col-span-5 flex flex-col gap-1.5 flex-grow">
+        <p>图标</p>
         <ul className="flex gap-2 rounded-lg">
           {PrefixIconValues.map(item => (
             <li
@@ -187,11 +214,6 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
               />
             </li>
           ))}
-        </ul>
-      </li>
-      <li className="col-span-3 flex flex-col gap-1.5 flex-grow">
-        <p>后缀图标</p>
-        <ul className="flex gap-2 rounded-lg">
           {SuffixIconValues.map(item => (
             <li
               key={item}
@@ -226,7 +248,55 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
           删除
         </button>
       </li>
-    </li>
+    </ul>
+  )
+}
+
+type SelectSearchProps = {
+  value: string
+  onChange: (value: string) => void
+  values: string[]
+  valueMap: Record<string, string>
+}
+
+function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild className="rounded-md h-9">
+        <Button variant="bordered" role="combobox" aria-expanded={open} className="justify-between w-full px-1">
+          <img src={`/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-300" />
+          <span className="flex-grow text-left">{value ? valueMap[value] || value : '选择武器'}</span>
+          <ChevronsUpDown className="w-4 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="搜索武器..." />
+          <CommandList>
+            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandGroup>
+              {values.map(v => (
+                <CommandItem
+                  key={v}
+                  value={v}
+                  onSelect={currentValue => {
+                    onChange(currentValue === value ? '' : currentValue)
+                    setOpen(false)
+                  }}
+                  className="p-1 cursor-pointer"
+                >
+                  <img src={`/weapon/${v}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-400" />
+                  {valueMap[v] || v}
+                  <Check className={cn('ml-auto', value === v ? 'opacity-100' : 'opacity-0')} />
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   )
 }
 
