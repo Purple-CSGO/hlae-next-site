@@ -9,7 +9,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronsUpDown, Check } from 'lucide-react'
 import { useState } from 'react'
-import { Button, cn } from "@heroui/react"
+import { Button, Switch, cn } from '@heroui/react'
 
 export default function Page() {
   return (
@@ -32,7 +32,7 @@ export default function Page() {
 }
 
 function SettingPanel() {
-  const { w, h, hidpi, prefix, setW, setH, setHidpi, setPrefix, reset } = useDMStore()
+  const { w, h, hidpi, prefix, mockLayout, setW, setH, setHidpi, setPrefix, setMockLayout, reset } = useDMStore()
 
   return (
     <section className="flex gap-6 w-full md:w-auto p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
@@ -44,7 +44,7 @@ function SettingPanel() {
           </button>
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-20 text-sm">宽</a>
+          <a className="w-24 text-sm">宽</a>
           <input
             className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
             value={w}
@@ -52,7 +52,7 @@ function SettingPanel() {
           />
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-20 text-sm">高</a>
+          <a className="w-24 text-sm">高</a>
           <input
             className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
             value={h}
@@ -60,7 +60,7 @@ function SettingPanel() {
           />
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-20 text-sm">渲染倍率</a>
+          <a className="w-24 text-sm">渲染倍率</a>
           <input
             className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
             value={hidpi}
@@ -68,12 +68,16 @@ function SettingPanel() {
           />
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-20 text-sm">文件名前缀</a>
+          <a className="w-24 text-sm">文件名前缀</a>
           <input
             className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
             value={prefix}
             onChange={prefix => setPrefix(String(prefix.target.value))}
           />
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <a className="w-24 text-sm">模拟游戏布局</a>
+          <Switch size="sm" isSelected={mockLayout} onValueChange={mockLayout => setMockLayout(mockLayout)} />
         </div>
       </div>
     </section>

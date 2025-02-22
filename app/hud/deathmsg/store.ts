@@ -9,6 +9,7 @@ interface DMState {
   hidpi: number
   prefix: string
   dNotices: DeathMsg[]
+  mockLayout: boolean
   setW: (w: number) => void
   setH: (h: number) => void
   setHidpi: (hidpi: number) => void
@@ -22,6 +23,7 @@ interface DMState {
   saveDNotices: () => void
   loadDNotices: (json: string) => void
   generateDNotice: () => void
+  setMockLayout: (mockLayout: boolean) => void
 }
 
 // 创建 store
@@ -33,6 +35,7 @@ const useDMStore = create<DMState>()(
       hidpi: 2,
       prefix: '击杀生成-',
       dNotices: DefaultDeathMsgs,
+      mockLayout: true,
       setW: (w: number) => set({ w }),
       setH: (h: number) => set({ h }),
       setHidpi: (hidpi: number) => set({ hidpi }),
@@ -76,49 +79,61 @@ const useDMStore = create<DMState>()(
 
         const dpi = hidpi ? hidpi : 1 // 缩放倍率，不随浏览器缩放改变
 
-        for (let i = 0; i < dNotices.length; i++) {
-          // 隐藏其他击杀条
-          for (let j = 0; j < dNotices.length; j++) {
-            get().setDNotice(j, { ...dNotices[j], hide: j !== i })
+        const mockLayoutGeneration = async () => {
+          // 生成过程 模拟游戏布局
+          for (let i = 0; i < dNotices.length; i++) {
+            // 隐藏其他击杀条
+            for (let j = 0; j < dNotices.length; j++) {
+              get().setDNotice(j, { ...dNotices[j], hide: j !== i })
+            }
+
+            await sleep(50)
+
+            // 滚动条置顶解决生成图片不全的问题
+            window.scrollY = 0
+            document.documentElement.scrollTop = 0
+            document.documentElement.scrollLeft = 0
+            document.body.scrollTop = 0
+            const canvas: HTMLCanvasElement = await html2canvas(e, {
+              allowTaint: false,
+              useCORS: false,
+              backgroundColor: 'rgba(0,0,0,0)',
+              scale: dpi,
+            })
+            const dataURL = canvas.toDataURL('image/png')
+            if (dataURL !== '') {
+              const link = document.createElement('a')
+              const context = canvas.getContext('2d')
+              if (context === null) return
+
+              // [重要]关闭抗锯齿
+              // context.imageSmoothingEnabled = false;
+              link.href = canvas.toDataURL()
+              link.setAttribute('download', prefix + i + '.png')
+              link.style.display = 'none'
+
+              document.body.appendChild(link)
+              link.click()
+              document.body.removeChild(link)
+            }
           }
 
-          await sleep(50)
-
-          // 滚动条置顶解决生成图片不全的问题
-          window.scrollY = 0
-          document.documentElement.scrollTop = 0
-          document.documentElement.scrollLeft = 0
-          document.body.scrollTop = 0
-          const canvas: HTMLCanvasElement = await html2canvas(e, {
-            allowTaint: false,
-            useCORS: false,
-            backgroundColor: 'rgba(0,0,0,0)',
-            scale: dpi,
-          })
-          const dataURL = canvas.toDataURL('image/png')
-          if (dataURL !== '') {
-            const link = document.createElement('a')
-            const context = canvas.getContext('2d')
-            if (context === null) return
-
-            // [重要]关闭抗锯齿
-            // context.imageSmoothingEnabled = false;
-            link.href = canvas.toDataURL()
-            link.setAttribute('download', prefix + i + '.png')
-            link.style.display = 'none'
-
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
+          for (let j = 0; j < dNotices.length; j++) {
+            get().setDNotice(j, { ...dNotices[j], hide: false })
           }
         }
 
-        for (let j = 0; j < dNotices.length; j++) {
-          get().setDNotice(j, { ...dNotices[j], hide: false })
+        const simpleGeneration = async () => {}
+
+        if (get().mockLayout) {
+          mockLayoutGeneration()
+        } else {
+          simpleGeneration()
         }
 
         style.remove()
       },
+      setMockLayout: (mockLayout: boolean) => set({ mockLayout }),
     }),
     {
       name: 'deathmsg',
