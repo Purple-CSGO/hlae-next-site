@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import { DeathMsg, DefaultDeathMsgs } from './dmsg'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import html2canvas from 'html2canvas'
+import { Canvas2Image } from './canvas'
+import { addToast } from '@heroui/react'
 
 interface DMState {
   w: number
@@ -33,14 +35,14 @@ const useDMStore = create<DMState>()(
       w: 1920,
       h: 1080,
       hidpi: 2,
-      prefix: '击杀生成-',
+      prefix: '击杀生成',
       dNotices: DefaultDeathMsgs,
       mockLayout: true,
       setW: (w: number) => set({ w }),
       setH: (h: number) => set({ h }),
       setHidpi: (hidpi: number) => set({ hidpi }),
       setPrefix: (prefix: string) => set({ prefix }),
-      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成-' }),
+      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成', dNotices: DefaultDeathMsgs, mockLayout: true }),
       setDNotices: (dNotices: DeathMsg[]) => set({ dNotices }),
       setDNotice: (index: number, dNotice: DeathMsg) =>
         set((state: DMState) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] })),
@@ -89,33 +91,7 @@ const useDMStore = create<DMState>()(
 
             await sleep(50)
 
-            // 滚动条置顶解决生成图片不全的问题
-            window.scrollY = 0
-            document.documentElement.scrollTop = 0
-            document.documentElement.scrollLeft = 0
-            document.body.scrollTop = 0
-            const canvas: HTMLCanvasElement = await html2canvas(e, {
-              allowTaint: false,
-              useCORS: false,
-              backgroundColor: 'rgba(0,0,0,0)',
-              scale: dpi,
-            })
-            const dataURL = canvas.toDataURL('image/png')
-            if (dataURL !== '') {
-              const link = document.createElement('a')
-              const context = canvas.getContext('2d')
-              if (context === null) return
-
-              // [重要]关闭抗锯齿
-              // context.imageSmoothingEnabled = false;
-              link.href = canvas.toDataURL()
-              link.setAttribute('download', prefix + i + '.png')
-              link.style.display = 'none'
-
-              document.body.appendChild(link)
-              link.click()
-              document.body.removeChild(link)
-            }
+            Canvas2Image(e, prefix + '-' + i, dpi)
           }
 
           for (let j = 0; j < dNotices.length; j++) {
@@ -123,7 +99,20 @@ const useDMStore = create<DMState>()(
           }
         }
 
-        const simpleGeneration = async () => {}
+        const simpleGeneration = async () => {
+          // 分别渲染 DeathNoticeRender 的所有 li组件，并下载png
+          for (let i = 0; i < dNotices.length; i++) {
+            get().setDNotice(i, { ...dNotices[i], hide: false })
+          }
+
+          const dnList = e.getElementsByTagName('li')
+          var i = 1
+          for (let dn of dnList) {
+            await sleep(10)
+            Canvas2Image(dn, prefix + '-' + i, dpi)
+            i++
+          }
+        }
 
         if (get().mockLayout) {
           mockLayoutGeneration()
@@ -132,6 +121,10 @@ const useDMStore = create<DMState>()(
         }
 
         style.remove()
+        addToast({
+          title: '生成成功',
+          description: '请查看下载文件夹',
+        })
       },
       setMockLayout: (mockLayout: boolean) => set({ mockLayout }),
     }),
