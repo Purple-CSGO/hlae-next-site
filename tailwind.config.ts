@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss'
-import { nextui } from '@nextui-org/react'
+import { heroui } from "@heroui/react"
 
 export default {
   darkMode: ['class', 'class'],
@@ -7,7 +7,7 @@ export default {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
   	extend: {
@@ -19,5 +19,5 @@ export default {
   		colors: {}
   	}
   },
-  plugins: [nextui(), require('tailwindcss-animate')],
+  plugins: [heroui(), require('tailwindcss-animate')],
 } satisfies Config

@@ -9,7 +9,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronsUpDown, Check } from 'lucide-react'
 import { useState } from 'react'
-import { Button, cn } from '@nextui-org/react'
+import { Button, cn } from "@heroui/react"
 
 export default function Page() {
   return (
