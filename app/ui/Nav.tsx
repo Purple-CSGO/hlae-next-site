@@ -4,6 +4,9 @@ import { H4 } from './Heading'
 import { useScroll } from 'ahooks'
 import { twMerge } from 'tailwind-merge'
 import { usePathname } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import { Moon, Sun } from 'lucide-react'
+import { Button } from '@heroui/react'
 
 function isBrowser() {
   return !!(typeof window !== 'undefined' && window.document && window.document.createElement)
@@ -12,6 +15,7 @@ function isBrowser() {
 export default function Nav() {
   const scroll = useScroll(isBrowser() ? document : null)
   const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
 
   return (
     <nav
@@ -35,6 +39,9 @@ export default function Nav() {
           <Link href="/about" className="font-semibold text-zinc-900 dark:text-zinc-100 text-md">
             关于
           </Link>
+          <Button size="sm" isIconOnly variant="light" onPress={() => setTheme(theme == 'dark' ? 'light' : 'dark')}>
+            {theme == 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </Button>
         </ul>
       </div>
     </nav>

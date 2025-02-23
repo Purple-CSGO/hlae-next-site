@@ -9,7 +9,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronsUpDown, Check } from 'lucide-react'
 import { Key, useState } from 'react'
-import { Button, Switch, Tab, Tabs, cn } from '@heroui/react'
+import { Button, Input, NumberInput, Switch, Tab, Tabs, cn } from '@heroui/react'
 
 export default function Page() {
   return (
@@ -48,44 +48,28 @@ function SettingPanel() {
       <div className="flex flex-col flex-wrap flex-grow gap-3">
         <div className="flex gap-4">
           <H3>偏好设置</H3>
-          <button onClick={() => reset()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
+          <Button size="sm" onPress={() => reset()} className="font-semibold">
             重置
-          </button>
+          </Button>
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-24 text-sm">宽</a>
-          <input
-            className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
-            value={w}
-            onChange={e => setW(Number(e.target.value))}
-          />
+          <a className="min-w-24 text-sm">宽</a>
+          <NumberInput labelPlacement="outside" size="sm" value={w} onValueChange={e => setW(e)} />
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-24 text-sm">高</a>
-          <input
-            className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
-            value={h}
-            onChange={h => setH(Number(h.target.value))}
-          />
+          <a className="min-w-24 text-sm">高</a>
+          <NumberInput labelPlacement="outside" size="sm" value={h} onValueChange={h => setH(h)} />
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-24 text-sm">渲染倍率</a>
-          <input
-            className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
-            value={hidpi}
-            onChange={hidpi => setHidpi(Number(hidpi.target.value))}
-          />
+          <a className="min-w-24 text-sm">渲染倍率</a>
+          <NumberInput labelPlacement="outside" size="sm" value={hidpi} onValueChange={hidpi => setHidpi(hidpi)} />
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-24 text-sm">文件名前缀</a>
-          <input
-            className="px-2 py-1 border rounded-md dark:bg-zinc-800 dark:border-zinc-600 bg-zinc-50"
-            value={prefix}
-            onChange={prefix => setPrefix(String(prefix.target.value))}
-          />
+          <a className="min-w-24 text-sm">文件名前缀</a>
+          <Input variant="flat" size="sm" value={prefix} onChange={prefix => setPrefix(String(prefix.target.value))} />
         </div>
         <div className="flex flex-row items-center gap-2">
-          <a className="w-24 text-sm">模拟游戏布局</a>
+          <a className="min-w-24 text-sm">模拟游戏布局</a>
           <Switch size="sm" isSelected={mockLayout} onValueChange={mockLayout => setMockLayout(mockLayout)} />
         </div>
       </div>
@@ -110,21 +94,21 @@ function DeathNoticePanel() {
     <section className="flex flex-col w-full gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
       <div className="flex flex-wrap items-start gap-4">
         <H3>击杀信息调整</H3>
-        <button onClick={() => saveDNotices()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
+        <Button size="sm" onPress={() => saveDNotices()} className="font-semibold">
           保存数据
-        </button>
-        <button onClick={() => loadDNotices('')} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
+        </Button>
+        <Button size="sm" onPress={() => loadDNotices('')} className="font-semibold">
           加载数据
-        </button>
-        <button onClick={() => resetDNotices()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
+        </Button>
+        <Button size="sm" onPress={() => resetDNotices()} className="font-semibold">
           恢复默认
-        </button>
-        <button onClick={() => generateDNotice()} className="px-3 py-1 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
+        </Button>
+        <Button size="sm" onPress={() => generateDNotice()} className="font-semibold">
           生成击杀
-        </button>
-        <button onClick={() => addDNotice(DefaultDeathMsg)} className="px-3 py-1 ml-auto font-semibold rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800">
+        </Button>
+        <Button size="sm" color="primary" variant="flat" onPress={() => addDNotice(DefaultDeathMsg)} className="ml-auto font-semibold">
           添加
-        </button>
+        </Button>
       </div>
       <ul className="flex flex-col gap-6" ref={parent}>
         {dNotices.map((dNotice: DeathMsg, i: number) => (
@@ -147,62 +131,28 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
     <ul className="grid items-center grid-cols-1 gap-4 p-4 border rounded-md md:grid-cols-6 dark:border-zinc-600">
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>击杀者</p>
-        <input
-          className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
-          value={deathNotice.attacker}
-          onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })}
-        />
+        <Input variant="flat" size="sm" value={deathNotice.attacker} onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })} />
       </li>
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>受害者</p>
-        <input
-          className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
-          value={deathNotice.victim}
-          onChange={e => setDNotice(index, { ...deathNotice, victim: e.target.value })}
-        />
+        <Input variant="flat" size="sm" value={deathNotice.victim} onChange={e => setDNotice(index, { ...deathNotice, victim: e.target.value })} />
       </li>
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>武器</p>
         <div className="flex gap-3">
-          {/* <input
-            className="flex-grow px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
-            value={deathNotice.weapon}
-            onChange={e => setDNotice(index, { ...deathNotice, weapon: e.target.value as Weapon })}
-          /> */}
-          {/* <Select value={deathNotice.weapon} onValueChange={value => setDNotice(index, { ...deathNotice, weapon: value as Weapon })}>
-            <SelectTrigger className="flex-grow px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700">
-              <SelectValue placeholder="武器" />
-            </SelectTrigger>
-            <SelectContent position="popper" sideOffset={10} className="p-1.5 rounded-lg bg-zinc-100">
-              <SelectGroup>
-                {WeaponValues.map(item => (
-                  <SelectItem key={item} value={item} className="py-0.5 px-1 cursor-pointer">
-                    {item}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select> */}
-          {/* <Select className="flex-grow border" label="" labelPlacement="outside">
-            {WeaponValues.map((item, index) => (
-              <SelectItem key={index}>{item}</SelectItem>
-            ))}
-          </Select> */}
           <SelectSearch
             value={deathNotice.weapon}
             values={WeaponValues}
             valueMap={WeaponMap}
             onChange={(value: string) => setDNotice(index, { ...deathNotice, weapon: value as Weapon })}
           />
-          <button
-            onClick={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
-            className={twMerge(
-              'px-3 py-1 font-semibold transition rounded flex-nowrap min-w-fit bg-zinc-100 border hover:bg-red-400 hover:text-white text-zinc-800',
-              deathNotice.redBorder && 'border-red-500 border bg-red-50'
-            )}
+          <Button
+            size="sm"
+            onPress={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
+            className={twMerge('font-semibold ', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100')}
           >
             红框
-          </button>
+          </Button>
         </div>
       </li>
       <li className="col-span-5 flex flex-col gap-1.5 flex-grow">
@@ -221,8 +171,8 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
                 src={`/dnFix/${item}.svg`}
                 alt="prefix"
                 className={twMerge(
-                  'w-9 h-9 p-1.5 rounded-lg text-black bg-zinc-300 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
-                  deathNotice.prefixIcons.includes(item) && 'bg-zinc-500'
+                  'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
+                  deathNotice.prefixIcons.includes(item) && 'bg-zinc-500 dark:bg-zinc-400'
                 )}
               />
             </li>
@@ -240,26 +190,18 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
                 src={`/dnFix/${item}.svg`}
                 alt="suffix"
                 className={twMerge(
-                  'w-9 h-9 p-1.5 rounded-lg text-black bg-zinc-300 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
-                  deathNotice.suffixIcons.includes(item) && 'bg-zinc-500'
+                  'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
+                  deathNotice.suffixIcons.includes(item) && 'bg-zinc-500 dark:bg-zinc-400'
                 )}
               />
             </li>
           ))}
         </ul>
-        {/* <input
-          className="px-2 py-1 border rounded-md bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700"
-          value={deathNotice.suffixIcons}
-          onChange={e => setDNotice(index, { ...deathNotice, suffixIcons: e.target.value as suffixIcon })}
-        /> */}
       </li>
       <li className="col-span-1 mt-auto ml-auto space-x-2">
-        <button
-          onClick={() => removeDNotice(index)}
-          className="px-3 py-1 mt-auto ml-auto font-semibold transition rounded bg-zinc-100 hover:bg-red-400 hover:text-white text-zinc-800"
-        >
+        <Button onPress={() => removeDNotice(index)} size="sm" className="ml-auto font-semibold bg-zinc-100 hover:bg-red-400 hover:text-white text-zinc-800">
           删除
-        </button>
+        </Button>
       </li>
     </ul>
   )
@@ -277,8 +219,8 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild className="rounded-md h-9">
-        <Button variant="bordered" role="combobox" aria-expanded={open} className="justify-between w-full px-1">
+      <PopoverTrigger asChild className="">
+        <Button variant="flat" size="sm" role="combobox" aria-expanded={open} className="justify-between w-full px-1.5">
           <img src={`/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-300" />
           <span className="flex-grow text-left">{value ? valueMap[value] || value : '选择武器'}</span>
           <ChevronsUpDown className="w-4 opacity-50" />
