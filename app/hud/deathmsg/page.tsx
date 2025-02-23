@@ -221,16 +221,16 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild className="">
         <Button variant="flat" size="sm" role="combobox" aria-expanded={open} className="justify-between w-full px-1.5">
-          <img src={`/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-300" />
+          <img src={`/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-400 dark:bg-zinc-600" />
           <span className="flex-grow text-left">{value ? valueMap[value] || value : '选择武器'}</span>
           <ChevronsUpDown className="w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="搜索武器..." />
+          <CommandInput placeholder="搜索武器装备..." />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>没有找到武器装备</CommandEmpty>
             <CommandGroup>
               {values.map(v => (
                 <CommandItem
