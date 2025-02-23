@@ -106,8 +106,8 @@ const useDMStore = create<DMState>()(
           }
 
           const dnList = e.getElementsByTagName('li')
-          var i = 1
-          for (let dn of dnList) {
+          let i = 1
+          for (const dn of dnList) {
             await sleep(10)
             Canvas2Image(dn, prefix + '-' + i, dpi)
             i++
