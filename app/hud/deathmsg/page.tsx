@@ -199,7 +199,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
         </ul>
       </li>
       <li className="col-span-1 mt-auto ml-auto space-x-2">
-        <Button onPress={() => removeDNotice(index)} size="sm" className="ml-auto font-semibold bg-zinc-100 hover:bg-red-400 hover:text-white text-zinc-800">
+        <Button onPress={() => removeDNotice(index)} size="sm" className="ml-auto font-semibold hover:bg-red-300 hover:text-white">
           删除
         </Button>
       </li>
