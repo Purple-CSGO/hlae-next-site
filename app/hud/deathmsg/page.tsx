@@ -8,7 +8,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronsUpDown, Check } from 'lucide-react'
 import { Key, use, useState } from 'react'
-import { Button, Input, NumberInput, Switch, Tab, Tabs, cn } from '@heroui/react'
+import { Button, Chip, Input, NumberInput, Switch, Tab, Tabs, cn } from '@heroui/react'
 
 export default function Page() {
   return (
@@ -34,7 +34,15 @@ function GameTypeTabs() {
     <Tabs selectedKey={gameType} onSelectionChange={(key: Key) => setGameType(key.toString())} aria-label="Game Type Variants" variant="underlined" size="lg">
       <Tab key="cs2" title="CS2 & GO" />
       {/* <Tab key="csgo" title="CSGO" /> */}
-      <Tab key="cstrike" title="CStrike" />
+      <Tab
+        key="cstrike"
+        title={
+          <div className="flex items-center space-x-2 px-2">
+            <span>CStrike</span>
+            <Chip size="sm">开发中</Chip>
+          </div>
+        }
+      />
     </Tabs>
   )
 }
@@ -291,7 +299,7 @@ function CS2DeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; index
         dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/cs2/deathnotice/${prefixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
       <img src={`/cs2/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
       {dNotice.suffixIcons &&
-        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cs2/deathnotice/${suffixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cs2/deathnotice/${suffixIcon}.svg`} alt="suffix" className="h-6" key={i} />)}
 
       <p className={cn(dNotice.victimCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.victim}</p>
     </li>
@@ -314,7 +322,7 @@ function CStrikeDeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; i
       <p className={cn('drop-shadow-[1px_0.5px_0_rgba(0,0,0,1)]', dNotice.attackerCamp === 'CT' ? 'text-[#a8d5fe]' : 'text-[#f84444]')}>{dNotice.attacker}</p>
       <img src={`/cstrike/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
       {dNotice.suffixIcons &&
-        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${suffixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${suffixIcon}.svg`} alt="suffix" className="h-6" key={i} />)}
 
       <p className={cn('drop-shadow-[1px_0.5px_0_rgba(0,0,0,1)]', dNotice.victimCamp === 'CT' ? 'text-[#a8d5fe]' : 'text-[#f84444]')}>{dNotice.victim}</p>
     </li>
