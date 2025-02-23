@@ -2,7 +2,6 @@
 
 import { H2, H3 } from '@/app/ui/Heading'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { twMerge } from 'tailwind-merge'
 import { DeathMsg, DefaultDeathMsg, PrefixIconValues, SuffixIconValues, Weapon, WeaponMap, WeaponValues } from './dmsg'
 import useDMStore from './store'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
@@ -79,7 +78,7 @@ function SettingPanel() {
 
 function PreviewPanel() {
   return (
-    <section className="flex flex-col flex-grow gap-6 p-6 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white/[.01] text-zinc-900 dark:text-zinc-100">
+    <section className="flex flex-col flex-grow gap-6 p-6 border border-zinc-300 dark:border-zinc-600 rounded-md dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100">
       <H3>预览</H3>
       <DeathNoticeRender />
     </section>
@@ -128,7 +127,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
   const { removeDNotice } = useDMStore()
 
   return (
-    <ul className="grid items-center grid-cols-1 gap-4 p-4 border rounded-md md:grid-cols-6 dark:border-zinc-600">
+    <ul className="grid items-center grid-cols-1 gap-4 p-4 border dark:border-zinc-800 rounded-md md:grid-cols-6 dark:bg-zinc-900/50">
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>击杀者</p>
         <Input variant="flat" size="sm" value={deathNotice.attacker} onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })} />
@@ -149,7 +148,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
           <Button
             size="sm"
             onPress={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
-            className={twMerge('font-semibold ', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100')}
+            className={cn('font-semibold ', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100')}
           >
             红框
           </Button>
@@ -170,7 +169,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
               <img
                 src={`/dnFix/${item}.svg`}
                 alt="prefix"
-                className={twMerge(
+                className={cn(
                   'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
                   deathNotice.prefixIcons.includes(item) && 'bg-zinc-500 dark:bg-zinc-400'
                 )}
@@ -189,7 +188,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
               <img
                 src={`/dnFix/${item}.svg`}
                 alt="suffix"
-                className={twMerge(
+                className={cn(
                   'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
                   deathNotice.suffixIcons.includes(item) && 'bg-zinc-500 dark:bg-zinc-400'
                 )}
@@ -260,7 +259,7 @@ type DeathNoticeRenderProps = {
 }
 
 function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
-  const { dNotices } = useDMStore()
+  const { dNotices, gameType } = useDMStore()
   const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
 
   return (
@@ -268,20 +267,20 @@ function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
       {dNotices.map((dNotice: DeathMsg, index: number) => (
         <li
           key={index}
-          className={twMerge(
+          className={cn(
             'flex flex-row items-center justify-center gap-1 px-2 py-1 h-8 text-sm leading-6 backdrop-blur font-bold font-[Stratum2] rounded text-white bg-black/65',
             dNotice.redBorder && 'border-2 border-[#e10000]',
             hide && dNotice.hide && 'invisible'
           )}
         >
-          <p className={twMerge(dNotice.attackerCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.attacker}</p>
+          <p className={cn(dNotice.attackerCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.attacker}</p>
           {dNotice.prefixIcons &&
             dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/dnFix/${prefixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
           <img src={`/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
           {dNotice.suffixIcons &&
             dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/dnFix/${suffixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
 
-          <p className={twMerge(dNotice.victimCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.victim}</p>
+          <p className={cn(dNotice.victimCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.victim}</p>
         </li>
       ))}
     </ul>
