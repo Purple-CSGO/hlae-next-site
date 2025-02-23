@@ -7,12 +7,12 @@ import useDMStore from './store'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronsUpDown, Check } from 'lucide-react'
-import { Key, useState } from 'react'
+import { Key, use, useState } from 'react'
 import { Button, Input, NumberInput, Switch, Tab, Tabs, cn } from '@heroui/react'
 
 export default function Page() {
   return (
-    <div className="flex flex-col items-center w-full max-w-screen-lg gap-8 px-8 py-8 mx-auto">
+    <div className="flex flex-col items-center w-full max-w-screen-lg gap-8 px-8 py-6 mx-auto">
       <H2>击杀信息生成</H2>
 
       <GameTypeTabs />
@@ -167,7 +167,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
               }
             >
               <img
-                src={`/dnFix/${item}.svg`}
+                src={`/cs2/deathnotice/${item}.svg`}
                 alt="prefix"
                 className={cn(
                   'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
@@ -186,7 +186,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
               }
             >
               <img
-                src={`/dnFix/${item}.svg`}
+                src={`/cs2/deathnotice/${item}.svg`}
                 alt="suffix"
                 className={cn(
                   'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
@@ -215,12 +215,13 @@ type SelectSearchProps = {
 
 function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) {
   const [open, setOpen] = useState(false)
+  const { gameType } = useDMStore()
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild className="">
         <Button variant="flat" size="sm" role="combobox" aria-expanded={open} className="justify-between w-full px-1.5">
-          <img src={`/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-400 dark:bg-zinc-600" />
+          <img src={`/${gameType || 'cs2'}/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-400 dark:bg-zinc-600" />
           <span className="flex-grow text-left">{value ? valueMap[value] || value : '选择武器'}</span>
           <ChevronsUpDown className="w-4 opacity-50" />
         </Button>
@@ -235,13 +236,13 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
                 <CommandItem
                   key={v}
                   value={v}
-                  onSelect={currentValue => {
+                  onSelect={(currentValue: string) => {
                     onChange(currentValue === value ? '' : currentValue)
                     setOpen(false)
                   }}
                   className="p-1 cursor-pointer"
                 >
-                  <img src={`/weapon/${v}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-400" />
+                  <img src={`/${gameType || 'cs2'}/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-400" />
                   {valueMap[v] || v}
                   <Check className={cn('ml-auto', value === v ? 'opacity-100' : 'opacity-0')} />
                 </CommandItem>
@@ -264,26 +265,59 @@ function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
 
   return (
     <ul className="flex flex-col items-end gap-1 pr-2.5 transition-transform" ref={parent}>
-      {dNotices.map((dNotice: DeathMsg, index: number) => (
-        <li
-          key={index}
-          className={cn(
-            'flex flex-row items-center justify-center gap-1 px-2 py-1 h-8 text-sm leading-6 backdrop-blur font-bold font-[Stratum2] rounded text-white bg-black/65',
-            dNotice.redBorder && 'border-2 border-[#e10000]',
-            hide && dNotice.hide && 'invisible'
-          )}
-        >
-          <p className={cn(dNotice.attackerCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.attacker}</p>
-          {dNotice.prefixIcons &&
-            dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/dnFix/${prefixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
-          <img src={`/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
-          {dNotice.suffixIcons &&
-            dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/dnFix/${suffixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
-
-          <p className={cn(dNotice.victimCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.victim}</p>
-        </li>
-      ))}
+      {dNotices.map((dNotice: DeathMsg, index: number) =>
+        gameType === 'cs2' ? (
+          <CS2DeathNoticeItem key={index} dNotice={dNotice} index={index} hide={hide} />
+        ) : (
+          <CStrikeDeathNoticeItem key={index} dNotice={dNotice} index={index} hide={hide} />
+        )
+      )}
     </ul>
+  )
+}
+
+function CS2DeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; index: number; hide: boolean }) {
+  return (
+    <li
+      key={index}
+      className={cn(
+        'flex flex-row items-center justify-center gap-1 px-2 py-1 h-8 text-sm leading-6 backdrop-blur font-bold font-[Stratum2] rounded text-white bg-black/65',
+        dNotice.redBorder && 'border-2 border-[#e10000]',
+        hide && dNotice.hide && 'invisible'
+      )}
+    >
+      <p className={cn(dNotice.attackerCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.attacker}</p>
+      {dNotice.prefixIcons &&
+        dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/cs2/deathnotice/${prefixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+      <img src={`/cs2/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
+      {dNotice.suffixIcons &&
+        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cs2/deathnotice/${suffixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+
+      <p className={cn(dNotice.victimCamp === 'CT' ? 'text-[#6F9CE6]' : 'text-[#EABE54]')}>{dNotice.victim}</p>
+    </li>
+  )
+}
+
+function CStrikeDeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; index: number; hide: boolean }) {
+  // TODO 修改cstrike击杀样式
+  // TODO 补充cstrike相关图标
+  return (
+    <li
+      key={index}
+      className={cn(
+        'flex flex-row items-center justify-center gap-1 px-2 py-1 h-8 text-sm leading-6 backdrop-blur font-light font-[Verdana] rounded text-white',
+        hide && dNotice.hide && 'invisible'
+      )}
+    >
+      {dNotice.prefixIcons &&
+        dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${prefixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+      <p className={cn('drop-shadow-[1px_0.5px_0_rgba(0,0,0,1)]', dNotice.attackerCamp === 'CT' ? 'text-[#a8d5fe]' : 'text-[#f84444]')}>{dNotice.attacker}</p>
+      <img src={`/cstrike/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
+      {dNotice.suffixIcons &&
+        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${suffixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+
+      <p className={cn('drop-shadow-[1px_0.5px_0_rgba(0,0,0,1)]', dNotice.victimCamp === 'CT' ? 'text-[#a8d5fe]' : 'text-[#f84444]')}>{dNotice.victim}</p>
+    </li>
   )
 }
 
