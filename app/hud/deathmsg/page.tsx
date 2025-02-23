@@ -8,19 +8,17 @@ import useDMStore from './store'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronsUpDown, Check } from 'lucide-react'
-import { useState } from 'react'
-import { Button, Switch, cn } from '@heroui/react'
+import { Key, useState } from 'react'
+import { Button, Switch, Tab, Tabs, cn } from '@heroui/react'
 
 export default function Page() {
   return (
     <div className="flex flex-col items-center w-full max-w-screen-lg gap-8 px-8 py-8 mx-auto">
       <H2>击杀信息生成</H2>
-      {/* <ul className="flex flex-row gap-4 text-zinc-900 dark:text-zinc-100">
-        <li>CS1.6</li>
-        <li>CSGO</li>
-        <li>CS2</li>
-      </ul> */}
-      <p className="text-zinc-900 dark:text-zinc-100">施工中... 功能尚未完善</p>
+
+      <GameTypeTabs />
+      {/* <p className="text-zinc-900 dark:text-zinc-100">施工中... 功能尚未完善</p> */}
+
       <div className="flex flex-row flex-wrap gap-6 pt-4">
         <SettingPanel />
         <PreviewPanel />
@@ -28,6 +26,17 @@ export default function Page() {
       </div>
       <DeathNoticeCanvas />
     </div>
+  )
+}
+
+function GameTypeTabs() {
+  const { gameType, setGameType } = useDMStore()
+  return (
+    <Tabs selectedKey={gameType} onSelectionChange={(key: Key) => setGameType(key.toString())} aria-label="Game Type Variants" variant="underlined" size="lg">
+      <Tab key="cs2" title="CS2 & GO" />
+      {/* <Tab key="csgo" title="CSGO" /> */}
+      <Tab key="cstrike" title="CStrike" />
+    </Tabs>
   )
 }
 

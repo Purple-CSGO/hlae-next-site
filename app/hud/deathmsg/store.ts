@@ -10,12 +10,14 @@ interface DMState {
   h: number
   hidpi: number
   prefix: string
+  gameType: string
   dNotices: DeathMsg[]
   mockLayout: boolean
   setW: (w: number) => void
   setH: (h: number) => void
   setHidpi: (hidpi: number) => void
   setPrefix: (prefix: string) => void
+  setGameType: (gameType: string) => void
   reset: () => void
   setDNotices: (dNotices: DeathMsg[]) => void
   setDNotice: (index: number, dNotice: DeathMsg) => void
@@ -36,13 +38,15 @@ const useDMStore = create<DMState>()(
       h: 1080,
       hidpi: 2,
       prefix: '击杀生成',
+      gameType: 'cs2',
       dNotices: DefaultDeathMsgs,
       mockLayout: true,
       setW: (w: number) => set({ w }),
       setH: (h: number) => set({ h }),
       setHidpi: (hidpi: number) => set({ hidpi }),
       setPrefix: (prefix: string) => set({ prefix }),
-      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成', dNotices: DefaultDeathMsgs, mockLayout: true }),
+      setGameType: (gameType: string) => set({ gameType }),
+      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成', gameType: 'cs2', dNotices: DefaultDeathMsgs, mockLayout: true }),
       setDNotices: (dNotices: DeathMsg[]) => set({ dNotices }),
       setDNotice: (index: number, dNotice: DeathMsg) =>
         set((state: DMState) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] })),
