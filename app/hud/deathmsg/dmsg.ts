@@ -17,7 +17,7 @@ export const DefaultDeathMsgs: DeathMsg[] = [
     victim: 'Victim',
     victimCamp: 'CT',
     weapon: 'ak47',
-    prefixIcons: ['blindkill'],
+    prefixIcons: ['blind_kill'],
     suffixIcons: ['headshot'],
     redBorder: false,
     hide: false,
@@ -28,7 +28,7 @@ export const DefaultDeathMsgs: DeathMsg[] = [
     victim: 'Purp1e',
     victimCamp: 'T',
     weapon: 'awp',
-    prefixIcons: ['revenge', 'blindkill'],
+    prefixIcons: ['revenge', 'blind_kill'],
     suffixIcons: [],
     redBorder: true,
     hide: false,
@@ -41,9 +41,9 @@ export type Camp = 'CT' | 'T' | ''
 
 export const CampValues: Camp[] = ['CT', 'T']
 
-export type prefixIcon = 'revenge' | 'domination' | 'blindkill' | ''
+export type prefixIcon = 'revenge' | 'domination' | 'blind_kill' | ''
 
-export const PrefixIconValues: prefixIcon[] = ['revenge', 'domination', 'blindkill']
+export const PrefixIconValues: prefixIcon[] = ['revenge', 'domination', 'blind_kill']
 
 export type suffixIcon = 'noscope' | 'jumpkill' | 'throughsmoke' | 'penetrate' | 'headshot' | 'suicide' | 'kill360' | ''
 
@@ -55,6 +55,7 @@ export type Weapon =
   | 'ammobox_threepack'
   | 'armor'
   | 'armor_helmet'
+  | 'assaultsuit_helmet_only'
   | 'assaultsuit'
   | 'aug'
   | 'awp'
@@ -65,11 +66,14 @@ export type Weapon =
   | 'breachcharge_projectile'
   | 'bumpmine'
   | 'c4'
+  | 'clothing_hands'
   | 'controldrone'
+  | 'customplayer'
   | 'cz75a'
   | 'deagle'
   | 'decoy'
   | 'defuser'
+  | 'disconnect'
   | 'diversion'
   | 'dronegun'
   | 'elite'
@@ -77,6 +81,7 @@ export type Weapon =
   | 'firebomb'
   | 'fists'
   | 'fiveseven'
+  | 'flair0'
   | 'flashbang'
   | 'flashbang_assist'
   | 'frag_grenade'
@@ -105,6 +110,7 @@ export type Weapon =
   | 'knife_gut'
   | 'knife_gypsy_jackknife'
   | 'knife_karambit'
+  | 'knife_kukri'
   | 'knife_m9_bayonet'
   | 'knife_push'
   | 'knife_skeleton'
@@ -112,6 +118,7 @@ export type Weapon =
   | 'knife_survival_bowie'
   | 'knife_t'
   | 'knife_tactical'
+  | 'knife_twinblade'
   | 'knife_ursus'
   | 'knife_widowmaker'
   | 'knifegg'
@@ -121,7 +128,9 @@ export type Weapon =
   | 'm249'
   | 'mac10'
   | 'mag7'
+  | 'melee'
   | 'molotov'
+  | 'movelinear'
   | 'mp5sd'
   | 'mp7'
   | 'mp9'
@@ -131,6 +140,7 @@ export type Weapon =
   | 'p250'
   | 'p2000'
   | 'planted_c4_survival'
+  | 'planted_c4'
   | 'prop_exploding_barrel'
   | 'radarjammer'
   | 'revolver'
@@ -141,12 +151,15 @@ export type Weapon =
   | 'smokegrenade'
   | 'snowball'
   | 'spanner'
+  | 'spray0'
   | 'ssg08'
   | 'stomp_damage'
   | 'tablet'
   | 'tagrenade'
   | 'taser'
   | 'tec9'
+  | 'tripwirefire_projectile'
+  | 'tripwirefire'
   | 'ump45'
   | 'usp_silencer'
   | 'usp_silencer_off'
@@ -160,6 +173,7 @@ export const WeaponValues: Weapon[] = [
   'ammobox_threepack',
   'armor',
   'armor_helmet',
+  'assaultsuit_helmet_only',
   'assaultsuit',
   'aug',
   'awp',
@@ -170,11 +184,14 @@ export const WeaponValues: Weapon[] = [
   'breachcharge_projectile',
   'bumpmine',
   'c4',
+  'clothing_hands',
   'controldrone',
+  'customplayer',
   'cz75a',
   'deagle',
   'decoy',
   'defuser',
+  'disconnect',
   'diversion',
   'dronegun',
   'elite',
@@ -182,6 +199,7 @@ export const WeaponValues: Weapon[] = [
   'firebomb',
   'fists',
   'fiveseven',
+  'flair0',
   'flashbang',
   'flashbang_assist',
   'frag_grenade',
@@ -210,6 +228,7 @@ export const WeaponValues: Weapon[] = [
   'knife_gut',
   'knife_gypsy_jackknife',
   'knife_karambit',
+  'knife_kukri',
   'knife_m9_bayonet',
   'knife_push',
   'knife_skeleton',
@@ -217,6 +236,7 @@ export const WeaponValues: Weapon[] = [
   'knife_survival_bowie',
   'knife_t',
   'knife_tactical',
+  'knife_twinblade',
   'knife_ursus',
   'knife_widowmaker',
   'knifegg',
@@ -226,7 +246,9 @@ export const WeaponValues: Weapon[] = [
   'm249',
   'mac10',
   'mag7',
+  'melee',
   'molotov',
+  'movelinear',
   'mp5sd',
   'mp7',
   'mp9',
@@ -236,6 +258,7 @@ export const WeaponValues: Weapon[] = [
   'p250',
   'p2000',
   'planted_c4_survival',
+  'planted_c4',
   'prop_exploding_barrel',
   'radarjammer',
   'revolver',
@@ -246,12 +269,15 @@ export const WeaponValues: Weapon[] = [
   'smokegrenade',
   'snowball',
   'spanner',
+  'spray0',
   'ssg08',
   'stomp_damage',
   'tablet',
   'tagrenade',
   'taser',
   'tec9',
+  'tripwirefire_projectile',
+  'tripwirefire',
   'ump45',
   'usp_silencer',
   'usp_silencer_off',
@@ -265,21 +291,25 @@ export const WeaponMap: Record<string, string> = {
   ammobox_threepack: '弹药箱三件套',
   armor: '护甲',
   armor_helmet: '护甲头盔',
+  assaultsuit_helmet_only: '突击套装头盔',
   assaultsuit: '突击套装',
   aug: 'AUG',
   awp: 'AWP',
   axe: '斧头',
   bayonet: '刺刀',
   bizon: 'PP野牛',
-  breachcharge: '攻坚电荷',
-  breachcharge_projectile: '攻坚电荷投射物',
-  bumpmine: '撞击地雷',
+  breachcharge: '遥控炸弹',
+  breachcharge_projectile: '遥控炸弹投射物',
+  bumpmine: '弹射地雷',
   c4: 'C4炸弹',
+  clothing_hands: '服装手',
   controldrone: '无人机',
+  customplayer: '自定义玩家',
   cz75a: 'CZ75',
   deagle: '沙漠之鹰',
   decoy: '诱饵弹',
   defuser: '拆弹器',
+  disconnect: '断开连接',
   diversion: '分散注意',
   dronegun: '无人机枪',
   elite: '精英',
@@ -287,6 +317,7 @@ export const WeaponMap: Record<string, string> = {
   firebomb: '燃烧弹',
   fists: '拳头',
   fiveseven: 'FN57',
+  flair0: '天赋',
   flashbang: '闪光弹',
   flashbang_assist: '闪光弹助攻',
   frag_grenade: '破片手榴弹',
@@ -296,7 +327,7 @@ export const WeaponMap: Record<string, string> = {
   grenadepack: '手榴弹包',
   grenadepack2: '手榴弹包2',
   hammer: '锤子',
-  healthshot: '健康射击',
+  healthshot: '医疗针',
   heavy_armor: '重装甲',
   hegrenade: '高爆手榴弹',
   helmet: '头盔',
@@ -315,6 +346,7 @@ export const WeaponMap: Record<string, string> = {
   knife_gut: '穿肠刀',
   knife_gypsy_jackknife: '折刀',
   knife_karambit: '爪子刀',
+  knife_kukri: '廓尔喀弯刀',
   knife_m9_bayonet: 'M9刺刀',
   knife_push: '暗影双匕',
   knife_skeleton: '骷髅匕首',
@@ -322,6 +354,7 @@ export const WeaponMap: Record<string, string> = {
   knife_survival_bowie: '求生鲍伊猎刀',
   knife_t: 'T刀',
   knife_tactical: '猎杀者匕首',
+  knife_twinblade: '双刃匕首',
   knife_ursus: '熊刀',
   knife_widowmaker: '锯齿爪刀',
   knifegg: 'gg刀',
@@ -331,7 +364,9 @@ export const WeaponMap: Record<string, string> = {
   m249: 'M249',
   mac10: 'MAC-10',
   mag7: 'MAG-7',
+  melee: '幽灵之刃',
   molotov: '燃烧弹',
+  movelinear: '移动线性',
   mp5sd: 'MP5',
   mp7: 'MP7',
   mp9: 'MP9',
@@ -341,6 +376,7 @@ export const WeaponMap: Record<string, string> = {
   p250: 'P250',
   p2000: 'P2000',
   planted_c4_survival: '放置C4生存',
+  planted_c4: '放置C4',
   prop_exploding_barrel: '爆炸桶',
   radarjammer: '雷达干扰器',
   revolver: '左轮手枪',
@@ -351,15 +387,18 @@ export const WeaponMap: Record<string, string> = {
   smokegrenade: '烟雾弹',
   snowball: '雪球',
   spanner: '扳手',
+  spray0: '喷漆',
   ssg08: 'SSG08',
   stomp_damage: '踩踏伤害',
   tablet: '平板',
   tagrenade: '标记手榴弹',
   taser: '电击枪',
   tec9: 'Tec-9',
+  tripwirefire_projectile: '绊网火投射物',
+  tripwirefire: '绊网火',
   ump45: 'UMP45',
   usp_silencer: 'USP消音版',
   usp_silencer_off: 'USP无消音器',
   xm1014: 'XM1014连喷',
-  zone_repulsor: '区域排斥器',
+  zone_repulsor: '区域排斥装置',
 }
