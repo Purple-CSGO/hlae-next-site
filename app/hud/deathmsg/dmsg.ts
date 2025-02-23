@@ -35,21 +35,92 @@ export const DefaultDeathMsgs: DeathMsg[] = [
   },
 ]
 
+export const CStrikeDefaultDeathMsgs: DeathMsg[] = [
+  {
+    attacker: 'Attacker',
+    attackerCamp: 'T',
+    victim: 'Victim',
+    victimCamp: 'CT',
+    weapon: 'ak47',
+    prefixIcons: [],
+    suffixIcons: ['headshot'],
+    redBorder: false,
+    hide: false,
+  },
+  {
+    attacker: 'CS1.6样式',
+    attackerCamp: 'CT',
+    victim: 'Purp1e',
+    victimCamp: 'T',
+    weapon: 'awp',
+    prefixIcons: [],
+    suffixIcons: [],
+    redBorder: true,
+    hide: false,
+  },
+]
+
 export const DefaultDeathMsg = DefaultDeathMsgs[0]
+export const CStrikeDefaultDeathMsg = CStrikeDefaultDeathMsgs[0]
 
 export type Camp = 'CT' | 'T' | ''
 
 export const CampValues: Camp[] = ['CT', 'T']
 
-export type prefixIcon = 'revenge' | 'domination' | 'blind_kill' | ''
+export type CStrikePrefixIcon = ''
+export type CS2PrefixIcon = 'revenge' | 'domination' | 'blind_kill' | ''
+export type prefixIcon = CStrikePrefixIcon | CS2PrefixIcon
 
-export const PrefixIconValues: prefixIcon[] = ['revenge', 'domination', 'blind_kill']
+export const CStrikePrefixIconValues: CStrikePrefixIcon[] = []
+export const CS2PrefixIconValues: CS2PrefixIcon[] = ['revenge', 'domination', 'blind_kill']
 
-export type suffixIcon = 'noscope' | 'jumpkill' | 'throughsmoke' | 'penetrate' | 'headshot' | 'suicide' | 'kill360' | ''
+export type CStrikeSuffixIcon = 'headshot' | ''
+export type CS2SuffixIcon = 'noscope' | 'jumpkill' | 'throughsmoke' | 'penetrate' | 'headshot' | 'suicide' | 'kill360' | ''
+export type suffixIcon = CStrikeSuffixIcon | CS2SuffixIcon
 
-export const SuffixIconValues: suffixIcon[] = ['noscope', 'jumpkill', 'throughsmoke', 'penetrate', 'headshot', 'suicide', 'kill360']
+export const CStrikeSuffixIconValues: CStrikeSuffixIcon[] = ['headshot']
+export const CS2SuffixIconValues: CS2SuffixIcon[] = ['noscope', 'jumpkill', 'throughsmoke', 'penetrate', 'headshot', 'suicide', 'kill360']
 
-export type Weapon =
+export type CStrikeWeapon =
+  | '228-compact'
+  | '550-commando'
+  | 'ak47'
+  | 'aug'
+  | 'awp'
+  | 'cs-grenade'
+  | 'd3_au-1'
+  | 'deagle'
+  | 'dual-elites'
+  | 'famas-1'
+  | 'famas'
+  | 'flare'
+  | 'gauge-super'
+  | 'glock'
+  | 'he-grenade'
+  | 'idf-defender'
+  | 'knife'
+  | 'krieg-552'
+  | 'law-grenade'
+  | 'm249-2'
+  | 'm249'
+  | 'mac10-1'
+  | 'mac10'
+  | 'melee'
+  | 'mp5'
+  | 'nade'
+  | 'p90'
+  | 'rifle'
+  | 'scout'
+  | 'sg552'
+  | 'suicide'
+  | 'train'
+  | 'ump45'
+  | 'usp-silencer'
+  | 'vault'
+  | 'wtf'
+  | 'yg1265'
+  | ''
+export type CS2Weapon =
   | 'ak47'
   | 'ammobox'
   | 'ammobox_threepack'
@@ -166,8 +237,48 @@ export type Weapon =
   | 'xm1014'
   | 'zone_repulsor'
   | ''
+export type Weapon = CStrikeWeapon | CS2Weapon
 
-export const WeaponValues: Weapon[] = [
+export const CStrikeWeaponValues: CStrikeWeapon[] = [
+  '228-compact',
+  '550-commando',
+  'ak47',
+  'aug',
+  'awp',
+  'cs-grenade',
+  'd3_au-1',
+  'deagle',
+  'dual-elites',
+  'famas-1',
+  'famas',
+  'flare',
+  'gauge-super',
+  'glock',
+  'he-grenade',
+  'idf-defender',
+  'knife',
+  'krieg-552',
+  'law-grenade',
+  'm249-2',
+  'm249',
+  'mac10-1',
+  'mac10',
+  'melee',
+  'mp5',
+  'nade',
+  'p90',
+  'rifle',
+  'scout',
+  'sg552',
+  'suicide',
+  'train',
+  'ump45',
+  'usp-silencer',
+  'vault',
+  'wtf',
+  'yg1265',
+]
+export const CS2WeaponValues: CS2Weapon[] = [
   'ak47',
   'ammobox',
   'ammobox_threepack',
@@ -285,7 +396,46 @@ export const WeaponValues: Weapon[] = [
   'zone_repulsor',
 ]
 
-export const WeaponMap: Record<string, string> = {
+export const CStrikeWeaponMap: Record<string, string> = {
+  '228-compact': '228-compact',
+  '550-commando': '550-commando',
+  ak47: 'ak47',
+  aug: 'aug',
+  awp: 'awp',
+  'cs-grenade': 'CS手雷',
+  'd3_au-1': 'D3/AU-1',
+  deagle: 'deagle',
+  'dual-elites': 'dual-elites',
+  'famas-1': 'famas-1',
+  famas: 'famas',
+  flare: 'flare',
+  'gauge-super': 'gauge-super',
+  glock: 'glock',
+  'he-grenade': 'HE手雷',
+  'idf-defender': 'idf-defender',
+  knife: 'knife',
+  'krieg-552': 'krieg-552',
+  'law-grenade': 'Law手雷',
+  'm249-2': 'm249-2',
+  m249: 'm249',
+  'mac10-1': 'mac10-1',
+  mac10: 'mac10',
+  melee: 'melee',
+  mp5: 'mp5',
+  nade: 'nade',
+  p90: 'p90',
+  rifle: 'rifle',
+  scout: 'scout',
+  sg552: 'sg552',
+  suicide: '自杀',
+  train: 'train',
+  ump45: 'ump45',
+  'usp-silencer': 'usp-silencer',
+  vault: 'vault',
+  wtf: 'wtf',
+  yg1265: 'yg1265',
+}
+export const CS2WeaponMap: Record<string, string> = {
   ak47: 'AK47',
   ammobox: '弹药箱',
   ammobox_threepack: '弹药箱三件套',
@@ -366,7 +516,7 @@ export const WeaponMap: Record<string, string> = {
   mag7: 'MAG-7',
   melee: '幽灵之刃',
   molotov: '燃烧弹',
-  movelinear: '移动线性',
+  movelinear: '拳击',
   mp5sd: 'MP5',
   mp7: 'MP7',
   mp9: 'MP9',

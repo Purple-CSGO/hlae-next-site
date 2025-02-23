@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { DeathMsg, DefaultDeathMsgs } from './dmsg'
+import { CStrikeDefaultDeathMsgs, DeathMsg, DefaultDeathMsgs } from './dmsg'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import html2canvas from 'html2canvas'
 import { Canvas2Image } from './canvas'
@@ -12,6 +12,7 @@ interface DMState {
   prefix: string
   gameType: string
   dNotices: DeathMsg[]
+  cstrikeDNotices: DeathMsg[]
   mockLayout: boolean
   setW: (w: number) => void
   setH: (h: number) => void
@@ -40,21 +41,37 @@ const useDMStore = create<DMState>()(
       prefix: '击杀生成',
       gameType: 'cs2',
       dNotices: DefaultDeathMsgs,
+      cstrikeDNotices: CStrikeDefaultDeathMsgs,
       mockLayout: true,
       setW: (w: number) => set({ w }),
       setH: (h: number) => set({ h }),
       setHidpi: (hidpi: number) => set({ hidpi }),
       setPrefix: (prefix: string) => set({ prefix }),
       setGameType: (gameType: string) => set({ gameType }),
-      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成', gameType: 'cs2', dNotices: DefaultDeathMsgs, mockLayout: true }),
-      setDNotices: (dNotices: DeathMsg[]) => set({ dNotices }),
-      setDNotice: (index: number, dNotice: DeathMsg) =>
-        set((state: DMState) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] })),
-      addDNotice: (dNotice: DeathMsg) => set((state: DMState) => ({ dNotices: [...state.dNotices, dNotice] })),
-      removeDNotice: (index: number) => set((state: DMState) => ({ dNotices: state.dNotices.filter((_, i: number) => i !== index) })),
-      resetDNotices: () => set({ dNotices: DefaultDeathMsgs }),
+      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成', dNotices: DefaultDeathMsgs, mockLayout: true }),
+      setDNotices: (dNotices: DeathMsg[]) => {
+        get().gameType === 'cs2' ? set({ dNotices: dNotices }) : set({ cstrikeDNotices: dNotices })
+      },
+      setDNotice: (index: number, dNotice: DeathMsg) => {
+        get().gameType === 'cs2'
+          ? set((state: DMState) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] }))
+          : set((state: DMState) => ({ cstrikeDNotices: [...state.cstrikeDNotices.slice(0, index), dNotice, ...state.cstrikeDNotices.slice(index + 1)] }))
+      },
+      addDNotice: (dNotice: DeathMsg) => {
+        get().gameType === 'cs2'
+          ? set((state: DMState) => ({ dNotices: [...state.dNotices, dNotice] }))
+          : set((state: DMState) => ({ cstrikeDNotices: [...state.cstrikeDNotices, dNotice] }))
+      },
+      removeDNotice: (index: number) => {
+        get().gameType === 'cs2'
+          ? set((state: DMState) => ({ dNotices: state.dNotices.filter((_, i: number) => i !== index) }))
+          : set((state: DMState) => ({ cstrikeDNotices: state.cstrikeDNotices.filter((_, i: number) => i !== index) }))
+      },
+      resetDNotices: () => {
+        get().gameType === 'cs2' ? set({ dNotices: DefaultDeathMsgs }) : set({ cstrikeDNotices: CStrikeDefaultDeathMsgs })
+      },
       saveDNotices: () => {
-        const jsonData = JSON.stringify({ dNotices: get().dNotices })
+        const jsonData = JSON.stringify({ dNotices: get().gameType === 'cs2' ? get().dNotices : get().cstrikeDNotices })
         // 弹出下载
         const blob = new Blob([jsonData], { type: 'application/json' })
         const url = URL.createObjectURL(blob)

@@ -2,7 +2,19 @@
 
 import { H2, H3 } from '@/app/ui/Heading'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { DeathMsg, DefaultDeathMsg, PrefixIconValues, SuffixIconValues, Weapon, WeaponMap, WeaponValues } from './dmsg'
+import {
+  DeathMsg,
+  DefaultDeathMsg,
+  CS2PrefixIconValues,
+  CS2SuffixIconValues,
+  CS2Weapon,
+  CS2WeaponMap,
+  CS2WeaponValues,
+  CStrikeWeaponMap,
+  CStrikeWeaponValues,
+  CStrikePrefixIconValues,
+  CStrikeSuffixIconValues,
+} from './dmsg'
 import useDMStore from './store'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -94,7 +106,7 @@ function PreviewPanel() {
 }
 
 function DeathNoticePanel() {
-  const { dNotices, setDNotice, saveDNotices, loadDNotices, resetDNotices, addDNotice, generateDNotice } = useDMStore()
+  const { dNotices, setDNotice, cstrikeDNotices, saveDNotices, loadDNotices, resetDNotices, addDNotice, generateDNotice, gameType } = useDMStore()
   const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
 
   return (
@@ -118,7 +130,7 @@ function DeathNoticePanel() {
         </Button>
       </div>
       <ul className="flex flex-col gap-6" ref={parent}>
-        {dNotices.map((dNotice: DeathMsg, i: number) => (
+        {(gameType === 'cs2' ? dNotices : cstrikeDNotices).map((dNotice: DeathMsg, i: number) => (
           <DeathNoticeItem key={i} index={i} deathNotice={dNotice} setDNotice={setDNotice} />
         ))}
       </ul>
@@ -132,7 +144,9 @@ type DeathNoticeItemProps = {
   setDNotice: (index: number, dNotice: DeathMsg) => void
 }
 function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProps) {
-  const { removeDNotice } = useDMStore()
+  const { removeDNotice, gameType } = useDMStore()
+  const PrefixIconValues = gameType == 'cs2' ? CS2PrefixIconValues : CStrikePrefixIconValues
+  const SuffixIconValues = gameType == 'cs2' ? CS2SuffixIconValues : CStrikeSuffixIconValues
 
   return (
     <ul className="grid items-center grid-cols-1 gap-4 p-4 border dark:border-zinc-800 rounded-md md:grid-cols-6 dark:bg-zinc-900/50">
@@ -149,17 +163,19 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
         <div className="flex gap-3">
           <SelectSearch
             value={deathNotice.weapon}
-            values={WeaponValues}
-            valueMap={WeaponMap}
-            onChange={(value: string) => setDNotice(index, { ...deathNotice, weapon: value as Weapon })}
+            values={gameType == 'cs2' ? CS2WeaponValues : CStrikeWeaponValues}
+            valueMap={gameType == 'cs2' ? CS2WeaponMap : CStrikeWeaponMap}
+            onChange={(value: string) => setDNotice(index, { ...deathNotice, weapon: value as CS2Weapon })}
           />
-          <Button
-            size="sm"
-            onPress={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
-            className={cn('font-semibold ', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100')}
-          >
-            红框
-          </Button>
+          {gameType == 'cs2' && (
+            <Button
+              size="sm"
+              onPress={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
+              className={cn('font-semibold ', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100')}
+            >
+              红框
+            </Button>
+          )}
         </div>
       </li>
       <li className="col-span-5 flex flex-col gap-1.5 flex-grow">
@@ -229,12 +245,16 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild className="">
         <Button variant="flat" size="sm" role="combobox" aria-expanded={open} className="justify-between w-full px-1.5">
-          <img src={`/${gameType || 'cs2'}/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-400 dark:bg-zinc-600" />
+          <img
+            src={gameType === 'cs2' ? `/cs2/weapon/${value}.svg` : `/cstrike/weapon/${value}.png`}
+            alt="suffix"
+            className={cn(gameType === 'cs2' ? 'w-6 h-6 p-1' : 'h-6 p-0', 'rounded bg-zinc-400 dark:bg-zinc-600')}
+          />
           <span className="flex-grow text-left">{value ? valueMap[value] || value : '选择武器'}</span>
           <ChevronsUpDown className="w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[280px] p-0">
         <Command>
           <CommandInput placeholder="搜索武器装备..." />
           <CommandList>
@@ -250,7 +270,11 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
                   }}
                   className="p-1 cursor-pointer"
                 >
-                  <img src={`/${gameType || 'cs2'}/weapon/${value}.svg`} alt="suffix" className="w-6 h-6 p-1 rounded bg-zinc-400" />
+                  <img
+                    src={gameType === 'cs2' ? `/cs2/weapon/${v}.svg` : `/cstrike/weapon/${v}.png`}
+                    alt="suffix"
+                    className={cn(gameType === 'cs2' ? 'w-6 h-6 p-1' : 'h-6 w-16 p-0', 'bg-contain rounded bg-zinc-400')}
+                  />
                   {valueMap[v] || v}
                   <Check className={cn('ml-auto', value === v ? 'opacity-100' : 'opacity-0')} />
                 </CommandItem>
@@ -268,12 +292,12 @@ type DeathNoticeRenderProps = {
 }
 
 function DeathNoticeRender({ hide = false }: DeathNoticeRenderProps) {
-  const { dNotices, gameType } = useDMStore()
+  const { dNotices, cstrikeDNotices, gameType } = useDMStore()
   const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
 
   return (
     <ul className="flex flex-col items-end gap-1 pr-2.5 transition-transform" ref={parent}>
-      {dNotices.map((dNotice: DeathMsg, index: number) =>
+      {(gameType === 'cs2' ? dNotices : cstrikeDNotices).map((dNotice: DeathMsg, index: number) =>
         gameType === 'cs2' ? (
           <CS2DeathNoticeItem key={index} dNotice={dNotice} index={index} hide={hide} />
         ) : (
@@ -307,8 +331,7 @@ function CS2DeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; index
 }
 
 function CStrikeDeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; index: number; hide: boolean }) {
-  // TODO 修改cstrike击杀样式
-  // TODO 补充cstrike相关图标
+  // TODO 图片后处理
   return (
     <li
       key={index}
@@ -318,11 +341,11 @@ function CStrikeDeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; i
       )}
     >
       {dNotice.prefixIcons &&
-        dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${prefixIcon}.svg`} alt="prefix" className="h-6" key={i} />)}
+        dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${prefixIcon}.png`} alt="prefix" className="h-6" key={i} />)}
       <p className={cn('drop-shadow-[1px_0.5px_0_rgba(0,0,0,1)]', dNotice.attackerCamp === 'CT' ? 'text-[#a8d5fe]' : 'text-[#f84444]')}>{dNotice.attacker}</p>
-      <img src={`/cstrike/weapon/${dNotice.weapon}.svg`} alt="weapon" className="h-6" />
+      <img src={`/cstrike/weapon/${dNotice.weapon}.png`} alt="weapon" className="h-6 " />
       {dNotice.suffixIcons &&
-        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${suffixIcon}.svg`} alt="suffix" className="h-6" key={i} />)}
+        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${suffixIcon}.png`} alt="suffix" className="h-6" key={i} />)}
 
       <p className={cn('drop-shadow-[1px_0.5px_0_rgba(0,0,0,1)]', dNotice.victimCamp === 'CT' ? 'text-[#a8d5fe]' : 'text-[#f84444]')}>{dNotice.victim}</p>
     </li>
