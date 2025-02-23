@@ -341,11 +341,15 @@ function CStrikeDeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; i
       )}
     >
       {dNotice.prefixIcons &&
-        dNotice.prefixIcons.map((prefixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${prefixIcon}.png`} alt="prefix" className="h-6" key={i} />)}
+        dNotice.prefixIcons.map((prefixIcon: string, i: number) => (
+          <img src={`/cstrike/deathnotice/${prefixIcon}.png`} alt="prefix" className="h-6 sepia" key={i} />
+        ))}
       <p className={cn('drop-shadow-[1px_0.5px_0_rgba(0,0,0,1)]', dNotice.attackerCamp === 'CT' ? 'text-[#a8d5fe]' : 'text-[#f84444]')}>{dNotice.attacker}</p>
-      <img src={`/cstrike/weapon/${dNotice.weapon}.png`} alt="weapon" className="h-6 " />
+      <img src={`/cstrike/weapon/${dNotice.weapon}.png`} alt="weapon" className="h-6 sepia" />
       {dNotice.suffixIcons &&
-        dNotice.suffixIcons.map((suffixIcon: string, i: number) => <img src={`/cstrike/deathnotice/${suffixIcon}.png`} alt="suffix" className="h-6" key={i} />)}
+        dNotice.suffixIcons.map((suffixIcon: string, i: number) => (
+          <img src={`/cstrike/deathnotice/${suffixIcon}.png`} alt="suffix" className="h-6 sepia" key={i} />
+        ))}
 
       <p className={cn('drop-shadow-[1px_0.5px_0_rgba(0,0,0,1)]', dNotice.victimCamp === 'CT' ? 'text-[#a8d5fe]' : 'text-[#f84444]')}>{dNotice.victim}</p>
     </li>
