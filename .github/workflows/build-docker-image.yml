@@ -17,7 +17,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: purp1e/hlae-next-site
-          # tags: v1, latest # Comment for auto tagging
+          tags: v1, latest # Comment for auto tagging
           registry: docker.io
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
