@@ -38,7 +38,7 @@ export const portalData: CardProps[] = [
   },
   {
     title: 'HUD生成器',
-    url: 'https://hud.hlae.site/',
+    url: '/hud/deathmsg',
     desc: '击杀信息和准星生成工具',
     icon: 'pi pi-wrench',
     background: true,

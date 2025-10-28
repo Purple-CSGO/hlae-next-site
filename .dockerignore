@@ -2,3 +2,9 @@ node_modules
 dist
 .vscode
 .next
+.git
+.env
+.env.local
+*.log
+build
+.idea
