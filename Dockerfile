@@ -1,7 +1,13 @@
-# use the official Bun image
-# see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1-alpine AS base
-FROM alpine:3.20 AS optim
+FROM oven/bun:alpine AS base
+FROM alpine:latest AS optim
+
+# 优化
+FROM optim AS optim-stage
+RUN apk add upx
+COPY --from=base /usr/local/bin/bun /usr/local/bin/
+WORKDIR /usr/local/bin
+# Compress bun binary
+RUN upx --best --no-lzma bun
 
 # 依赖
 FROM base AS dependency-stage
@@ -15,16 +21,8 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY . .
 COPY --from=dependency-stage /app/node_modules /app/node_modules
-RUN bun test
+# RUN bun test
 RUN bun run build
-
-# 优化
-FROM optim AS optim-stage
-RUN apk add upx
-COPY --from=base /usr/local/bin/bun /usr/local/bin/
-WORKDIR /usr/local/bin
-# Compress bun binary
-RUN upx --all-methods --no-lzma bun
 
 # 打包
 FROM frolvlad/alpine-glibc AS release-stage

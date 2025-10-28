@@ -7,7 +7,7 @@ export default function Footer() {
           <a href="https://github.com/Purple-CSGO" className="font-bold text-zinc-700">
             Purple-CSGO
           </a>{' '}
-          ©2024
+          ©2025
         </span>
 
         <Beian record="皖公网安备34012302000653" icp="皖ICP备20002252号-2" />

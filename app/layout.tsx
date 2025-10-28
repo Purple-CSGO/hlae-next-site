@@ -5,6 +5,7 @@ import 'primeicons/primeicons.css'
 
 import Nav from './ui/Nav'
 import Footer from './ui/Footer'
+import { Providers } from './providers'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -23,17 +24,19 @@ export const metadata: Metadata = {
   icons: '/logo2009.svg',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-zinc-900`}>
-        <Nav />
-        {children}
-        <Footer />
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}>
+        <Providers>
+          <Nav />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   )

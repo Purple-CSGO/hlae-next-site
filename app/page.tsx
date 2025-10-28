@@ -4,6 +4,8 @@ import { H1, H2 } from './ui/Heading'
 import { resourceData } from './data/resource'
 import { FaGithub } from 'react-icons/fa'
 
+export const revalidate = 10800 // 3 hours
+
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen row-start-2 gap-20 py-32 mx-auto sm:items-start">

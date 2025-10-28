@@ -1,0 +1,113 @@
+/* 参考用 */
+@font-face {
+  font-family: 'Stratum2';
+  src: url('@/assets/font/Stratum2.ttf');
+  font-style: normal;
+  font-weight: bold;
+}
+
+.setting-input {
+  @apply px-3 py-1 rounded-lg outline-none;
+}
+
+.dn-input {
+  @apply px-3 py-1 rounded-lg outline-none bg-gray-100 w-full;
+}
+
+.dn-item {
+  @apply flex flex-col gap-3 bg-white rounded-lg p-3;
+}
+
+.dn-camp {
+  @apply bg-gray-100 rounded w-12;
+}
+
+.dn-fix-icon {
+  @apply rounded  p-1 w-8 transition duration-200 hover:bg-gray-300 active:scale-95;
+}
+
+// .dn-button {
+// }
+
+#OutputDiv {
+  clear: both;
+  /*width: 1920px;*/
+  /*height: 1080px;*/
+  /*position: fixed;*/
+  /*float: end;*/
+  margin: 30px auto;
+  /*background: pink;  !*debug用的颜色*!*/
+  background: rgba(0, 0, 0, 0);
+  /**/
+  /*font-weight: bold;*/
+  /*font-family: 'Stratum2';*/
+  /* src: url("../assets/font/Stratum2.ttf") format('truetype'); */
+}
+
+.deathNotice {
+  font-family: 'Stratum2', 'Arial Unicode MS', 'Helvetica Neue', 'Helvetica', 'PingFang SC', 'Sarasa Gothic SC', 'Source Han Sans', 'Noto Sans SC',
+    'Alibaba Puhuiti 2', 'Alibaba Puhuiti', Avenir, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: bold;
+  width: max-content;
+  /*float: right;*/
+  right: 0;
+  padding: 6px 12px 6px 12px;
+  transition-property: opacity;
+  transition-timing-function: ease-out;
+  background-color: rgba(0, 0, 0, 0.65);
+  border-radius: 4px;
+  text-align: center;
+  /*box-shadow: inset #e10000e6 0px 0px 1px;*/
+  /*border: 2px solid #e10000;*/
+  /*border: 2px outset rgba(0,0,0,0.44);*/
+}
+
+.dn-gen {
+  line-height: 0.5 !important;
+}
+
+.CT {
+  color: rgb(111, 156, 230);
+}
+
+.T {
+  color: rgb(234, 190, 84);
+}
+
+.weapon {
+  background: rgba(0, 0, 0, 0);
+  height: 23px;
+  vertical-align: middle;
+  visibility: visible;
+}
+
+.prefix {
+  height: 24px;
+}
+
+.suffix {
+  height: 24px;
+}
+
+.attacker {
+  padding-right: 4px;
+  font-size: 16px;
+}
+
+.victim {
+  padding-left: 4px;
+  font-size: 16px;
+}
+
+.DispRedBorder {
+  /*height: 30px;*/
+  border: 2px solid #e10000;
+  padding: 4px 10px 4px 10px;
+}
+
+.dn-transparent {
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+}
