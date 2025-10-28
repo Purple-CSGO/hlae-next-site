@@ -7,7 +7,7 @@ RUN apk add upx
 COPY --from=base /usr/local/bin/bun /usr/local/bin/
 WORKDIR /usr/local/bin
 # Compress bun binary
-RUN upx --best --no-lzma bun
+RUN upx --no-lzma bun
 
 # 依赖
 FROM base AS dependency-stage
