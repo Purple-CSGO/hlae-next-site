@@ -77,8 +77,16 @@ const useDMStore = create<DMState>()(
         const a = document.createElement('a')
         a.href = url
         a.download = get().prefix + '_dNotices.json'
+        a.style.display = 'none'
+        document.body.appendChild(a)
         a.click()
-        URL.revokeObjectURL(url)
+        // 等待一小段时间确保下载已触发，然后再移除元素
+        setTimeout(() => {
+          if (a.parentNode) {
+            document.body.removeChild(a)
+          }
+          URL.revokeObjectURL(url)
+        }, 100)
       },
       loadDNotices: (json: string) => {
         // 上传文件并读取json
@@ -113,7 +121,7 @@ const useDMStore = create<DMState>()(
 
             await sleep(50)
 
-            Canvas2Image(e, prefix + '-' + i, dpi)
+            await Canvas2Image(e, prefix + '-' + (i + 1), dpi)
           }
 
           for (let j = 0; j < currentDNotices.length; j++) {
@@ -132,18 +140,23 @@ const useDMStore = create<DMState>()(
           let i = 1
           for (const dn of dnList) {
             await sleep(10)
-            Canvas2Image(dn, prefix + '-' + i, dpi)
+            await Canvas2Image(dn, prefix + '-' + i, dpi)
             i++
           }
         }
 
-        if (get().mockLayout) {
-          mockLayoutGeneration()
-        } else {
-          simpleGeneration()
+        try {
+          if (get().mockLayout) {
+            await mockLayoutGeneration()
+          } else {
+            await simpleGeneration()
+          }
+        } finally {
+          // 确保 style 元素被移除
+          if (style.parentNode) {
+            style.remove()
+          }
         }
-
-        style.remove()
         addToast({
           title: '生成成功',
           description: '请查看下载文件夹',

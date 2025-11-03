@@ -45,7 +45,14 @@ export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
 
       document.body.appendChild(link)
       link.click()
-      document.body.removeChild(link)
+      
+      // 等待一小段时间确保下载已触发，然后再移除元素
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
+      // 确保元素存在且仍在 DOM 中再移除
+      if (link.parentNode) {
+        document.body.removeChild(link)
+      }
     }
   } catch (error) {
     console.error('生成 PNG 失败:', error)

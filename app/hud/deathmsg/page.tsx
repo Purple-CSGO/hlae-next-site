@@ -14,11 +14,13 @@ import {
   CStrikeWeaponValues,
   CStrikePrefixIconValues,
   CStrikeSuffixIconValues,
+  Camp,
+  CampValues,
 } from './dmsg'
 import useDMStore from './store'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ChevronsUpDown, Check, Save, RefreshCcw, Loader } from 'lucide-react'
+import { ChevronsUpDown, Check, Save, RefreshCcw, Loader, RotateCcw, Plus, Sparkles, Trash2, Square } from 'lucide-react'
 import { Key, useState } from 'react'
 import { Button, Chip, Input, NumberInput, Switch, Tab, Tabs, cn } from '@heroui/react'
 import { IoSwapHorizontal } from 'react-icons/io5'
@@ -68,29 +70,30 @@ function SettingPanel() {
       <div className="flex flex-col flex-wrap flex-grow gap-3">
         <div className="flex gap-4">
           <H3>偏好设置</H3>
-          <Button size="sm" variant="flat" onPress={() => reset()} className="font-semibold">
+          <Button size="sm" variant="flat" onPress={() => reset()} className="font-semibold gap-1">
+            <RotateCcw size={14} />
             重置
           </Button>
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">宽</a>
-          <NumberInput labelPlacement="outside" size="sm" value={w} onValueChange={e => setW(e)} />
+          <NumberInput labelPlacement="outside" size="sm" value={w} onValueChange={e => setW(e)} aria-label="宽度" />
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">高</a>
-          <NumberInput labelPlacement="outside" size="sm" value={h} onValueChange={h => setH(h)} />
+          <NumberInput labelPlacement="outside" size="sm" value={h} onValueChange={h => setH(h)} aria-label="高度" />
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">渲染倍率</a>
-          <NumberInput labelPlacement="outside" size="sm" value={hidpi} onValueChange={hidpi => setHidpi(hidpi)} />
+          <NumberInput labelPlacement="outside" size="sm" value={hidpi} onValueChange={hidpi => setHidpi(hidpi)} aria-label="渲染倍率" />
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">文件名前缀</a>
-          <Input variant="flat" size="sm" value={prefix} onChange={prefix => setPrefix(String(prefix.target.value))} />
+          <Input variant="flat" size="sm" value={prefix} onChange={prefix => setPrefix(String(prefix.target.value))} aria-label="文件名前缀" />
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">模拟游戏布局</a>
-          <Switch size="sm" isSelected={mockLayout} onValueChange={mockLayout => setMockLayout(mockLayout)} />
+          <Switch size="sm" isSelected={mockLayout} onValueChange={mockLayout => setMockLayout(mockLayout)} aria-label="模拟游戏布局" />
         </div>
       </div>
     </section>
@@ -112,7 +115,7 @@ function DeathNoticePanel() {
 
   return (
     <section className="flex flex-col w-full gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
-      <div className="flex flex-wrap items-start gap-4">
+      <div className="flex flex-wrap items-start gap-2">
         <H3>击杀信息调整</H3>
         <Button size="sm" variant="flat" onPress={() => saveDNotices()} className="font-semibold gap-1">
           <Save size={14} />
@@ -126,11 +129,13 @@ function DeathNoticePanel() {
           <RefreshCcw size={14} />
           恢复默认
         </Button>
-        <Button size="sm" color="secondary" variant="flat" onPress={() => generateDNotice()} className="font-semibold">
-          生成击杀
-        </Button>
-        <Button size="sm" color="primary" variant="flat" onPress={() => addDNotice(DefaultDeathMsg)} className="ml-auto font-semibold">
+        <Button size="sm" color="primary" variant="flat" onPress={() => addDNotice(DefaultDeathMsg)} className="ml-auto font-semibold gap-1">
+          <Plus size={14} />
           添加
+        </Button>
+        <Button size="sm" color="secondary" variant="flat" onPress={() => generateDNotice()} className="font-semibold gap-1">
+          <Sparkles size={14} />
+          生成击杀
         </Button>
       </div>
       <ul className="flex flex-col gap-6" ref={parent}>
@@ -156,22 +161,31 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
     <ul className="grid items-center grid-cols-1 gap-4 p-4 border dark:border-zinc-800 rounded-md md:grid-cols-6 dark:bg-zinc-900/50">
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>击杀者</p>
-        <Input variant="flat" size="sm" value={deathNotice.attacker} onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })} />
-      </li>
-      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
-        <p className="w-full flex  items-center justify-between">
-          受害者
-          <Button
+        <div className="flex gap-2">
+          <Input
             variant="flat"
             size="sm"
-            className=" gap-1 font-semibold"
-            onPress={() => setDNotice(index, { ...deathNotice, attacker: deathNotice.victim, victim: deathNotice.attacker })}
-          >
-            <IoSwapHorizontal size={14} />
-            交换
-          </Button>
-        </p>
-        <Input variant="flat" size="sm" value={deathNotice.victim} onChange={e => setDNotice(index, { ...deathNotice, victim: e.target.value })} />
+            value={deathNotice.attacker}
+            onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })}
+            aria-label="击杀者"
+            className="flex-grow"
+          />
+          <CampButton value={deathNotice.attackerCamp} onChange={camp => setDNotice(index, { ...deathNotice, attackerCamp: camp })} />
+        </div>
+      </li>
+      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
+        <p className="w-full flex  items-center justify-between">受害者</p>
+        <div className="flex gap-2">
+          <Input
+            variant="flat"
+            size="sm"
+            value={deathNotice.victim}
+            onChange={e => setDNotice(index, { ...deathNotice, victim: e.target.value })}
+            aria-label="受害者"
+            className="flex-grow"
+          />
+          <CampButton value={deathNotice.victimCamp} onChange={camp => setDNotice(index, { ...deathNotice, victimCamp: camp })} />
+        </div>
       </li>
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>武器</p>
@@ -182,66 +196,117 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
             valueMap={gameType == 'cs2' ? CS2WeaponMap : CStrikeWeaponMap}
             onChange={(value: string) => setDNotice(index, { ...deathNotice, weapon: value as CS2Weapon })}
           />
-          {gameType == 'cs2' && (
-            <Button
-              size="sm"
-              onPress={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
-              className={cn('font-semibold ', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100')}
-            >
-              红框
-            </Button>
-          )}
         </div>
       </li>
-      <li className="col-span-5 flex flex-col gap-1.5 flex-grow">
+      <li className="col-span-4 flex flex-col gap-1.5">
         <p>图标</p>
         <ul className="flex gap-2 rounded-lg">
           {PrefixIconValues.map(item => (
-            <li
-              key={item}
-              onClick={() =>
-                deathNotice.prefixIcons.includes(item)
-                  ? setDNotice(index, { ...deathNotice, prefixIcons: deathNotice.prefixIcons.filter(i => i !== item) })
-                  : setDNotice(index, { ...deathNotice, prefixIcons: [...deathNotice.prefixIcons, item] })
-              }
-            >
-              <img
-                src={`/cs2/deathnotice/${item}.svg`}
-                alt="prefix"
+            <li key={item}>
+              <button
+                type="button"
+                onClick={() =>
+                  deathNotice.prefixIcons.includes(item)
+                    ? setDNotice(index, { ...deathNotice, prefixIcons: deathNotice.prefixIcons.filter(i => i !== item) })
+                    : setDNotice(index, { ...deathNotice, prefixIcons: [...deathNotice.prefixIcons, item] })
+                }
+                aria-label={`切换前缀图标 ${item}`}
+                aria-pressed={deathNotice.prefixIcons.includes(item)}
                 className={cn(
                   'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
                   deathNotice.prefixIcons.includes(item) && 'bg-zinc-500 dark:bg-zinc-400'
                 )}
-              />
+              >
+                <img src={`/cs2/deathnotice/${item}.svg`} alt={`前缀图标 ${item}`} className="w-full h-full" />
+              </button>
             </li>
           ))}
           {SuffixIconValues.map(item => (
-            <li
-              key={item}
-              onClick={() =>
-                deathNotice.suffixIcons.includes(item)
-                  ? setDNotice(index, { ...deathNotice, suffixIcons: deathNotice.suffixIcons.filter(i => i !== item) })
-                  : setDNotice(index, { ...deathNotice, suffixIcons: [...deathNotice.suffixIcons, item] })
-              }
-            >
-              <img
-                src={`/cs2/deathnotice/${item}.svg`}
-                alt="suffix"
+            <li key={item}>
+              <button
+                type="button"
+                onClick={() =>
+                  deathNotice.suffixIcons.includes(item)
+                    ? setDNotice(index, { ...deathNotice, suffixIcons: deathNotice.suffixIcons.filter(i => i !== item) })
+                    : setDNotice(index, { ...deathNotice, suffixIcons: [...deathNotice.suffixIcons, item] })
+                }
+                aria-label={`切换后缀图标 ${item}`}
+                aria-pressed={deathNotice.suffixIcons.includes(item)}
                 className={cn(
                   'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
                   deathNotice.suffixIcons.includes(item) && 'bg-zinc-500 dark:bg-zinc-400'
                 )}
-              />
+              >
+                <img src={`/cs2/deathnotice/${item}.svg`} alt={`后缀图标 ${item}`} className="w-full h-full" />
+              </button>
             </li>
           ))}
         </ul>
       </li>
-      <li className="col-span-1 mt-auto ml-auto space-x-2">
-        <Button onPress={() => removeDNotice(index)} size="sm" className="ml-auto font-semibold hover:bg-red-300 hover:text-white">
+      <li className="col-span-2 mt-auto ml-auto space-x-2 flex">
+        <Button variant="flat" onPress={() => removeDNotice(index)} size="sm" className="font-semibold hover:bg-red-300 hover:text-white gap-1">
+          <Trash2 size={14} />
           删除
         </Button>
+        <Button
+          variant="flat"
+          size="sm"
+          className=" gap-1 font-semibold"
+          onPress={() => setDNotice(index, { ...deathNotice, attacker: deathNotice.victim, victim: deathNotice.attacker })}
+        >
+          <IoSwapHorizontal size={14} />
+          交换
+        </Button>
+        {gameType == 'cs2' && (
+          <Button
+            variant="flat"
+            size="sm"
+            onPress={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
+            className={cn('font-semibold gap-1', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100')}
+          >
+            <Square size={14} />
+            红框
+          </Button>
+        )}
       </li>
     </ul>
+  )
+}
+
+type CampButtonProps = {
+  value: Camp
+  onChange: (value: Camp) => void
+  label?: string
+}
+
+function CampButton({ value, onChange, label }: CampButtonProps) {
+  const { gameType } = useDMStore()
+
+  const getNextCamp = (current: Camp): Camp => {
+    return current === 'CT' ? 'T' : 'CT'
+  }
+
+  const getCampColor = (camp: Camp) => {
+    if (camp === '') return 'border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-400'
+    if (gameType === 'cs2') {
+      return camp === 'CT' ? 'border-[#6F9CE6] text-[#6F9CE6]' : 'border-[#EABE54] text-[#EABE54]'
+    } else {
+      return camp === 'CT' ? 'border-[#a8d5fe] text-[#a8d5fe]' : 'border-[#f84444] text-[#f84444]'
+    }
+  }
+
+  const displayValue = value || '—'
+
+  return (
+    <Button
+      size="sm"
+      variant="bordered"
+      onPress={() => onChange(getNextCamp(value))}
+      className={cn('font-semibold min-w-12 border-1.5', getCampColor(value))}
+      aria-label={`切换阵营，当前：${value === 'CT' ? '反恐精英' : value === 'T' ? '恐怖分子' : '无'}`}
+    >
+      {displayValue}
+    </Button>
   )
 }
 
@@ -259,10 +324,10 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild className="">
-        <Button variant="flat" size="sm" role="combobox" aria-expanded={open} className="justify-between w-full px-1.5">
+        <Button variant="flat" size="sm" role="combobox" aria-expanded={open} aria-label="选择武器" className="justify-between w-full px-1.5">
           <img
             src={gameType === 'cs2' ? `/cs2/weapon/${value}.svg` : `/cstrike/weapon/${value}.png`}
-            alt="suffix"
+            alt={value ? `武器 ${valueMap[value] || value}` : '未选择武器'}
             className={cn(gameType === 'cs2' ? 'w-6 h-6 p-1' : 'h-6 p-0', 'rounded bg-zinc-400 dark:bg-zinc-600')}
           />
           <span className="flex-grow text-left">{value ? valueMap[value] || value : '选择武器'}</span>
@@ -271,7 +336,7 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
       </PopoverTrigger>
       <PopoverContent className="w-[280px] p-0">
         <Command>
-          <CommandInput placeholder="搜索武器装备..." />
+          <CommandInput placeholder="搜索武器装备..." aria-label="搜索武器装备" />
           <CommandList>
             <CommandEmpty>没有找到武器装备</CommandEmpty>
             <CommandGroup>
