@@ -3,7 +3,6 @@ import { portalData } from './data/portal'
 import { H1, H2 } from './ui/Heading'
 import { resourceData } from './data/resource'
 import { FaGithub } from 'react-icons/fa'
-import Image from 'next/image'
 import type { Metadata } from 'next'
 
 // ISR：3小时重新验证，使用 stale-while-revalidate 策略
@@ -58,7 +57,7 @@ function Hero() {
           target="_blank"
           className="pl-3 pr-4 py-2 flex flex-row justify-center items-center rounded-full font-semibold transition duration-200 active:scale-95 text-[#fff] bg-[#CA4940] hover:bg-[#B33B32]"
         >
-          <Image src="/icon/hlae.svg" alt="HLAE Logo" width={24} height={24} className="w-6 h-6" unoptimized priority />
+          <img src="/icon/hlae.svg" alt="HLAE Logo" className="w-6 h-6" />
           官方网站
         </a>
         <a

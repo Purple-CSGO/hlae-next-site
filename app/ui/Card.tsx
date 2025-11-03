@@ -24,18 +24,13 @@ export function Card({ title, url, desc, icon, version, background, download_cdn
       <Link href={url} className="flex items-center gap-1">
         <div className={twMerge('w-12 h-12 shrink-0 rounded-xl mr-2 flex justify-center items-center', background && 'bg-zinc-200 dark:bg-zinc-700')}>
           {icon && <i className={twMerge('text-2xl', icon)} />}
-          {image && !icon && (
-            <Image
-              src={image}
-              alt={title}
-              width={48}
-              height={48}
-              className={twMerge('rounded-xl', className)}
-              loading="lazy"
-              // 静态资源图片可以缓存
-              unoptimized={image.startsWith('/icon/') && (image.endsWith('.png') || image.endsWith('.svg'))}
-            />
-          )}
+          {image &&
+            !icon &&
+            (image.endsWith('.svg') ? (
+              <img src={image} alt={title} className={twMerge('rounded-xl w-12 h-12', className)} loading="lazy" />
+            ) : (
+              <Image src={image} alt={title} width={48} height={48} className={twMerge('rounded-xl', className)} loading="lazy" />
+            ))}
         </div>
         <div className="flex gap-x-2 gap-y-1 flex-wrap items-center">
           <H4 className="cursor-pointer hover:underline underline-offset-4 text-zinc-950 dark:text-zinc-200">{title}</H4>
