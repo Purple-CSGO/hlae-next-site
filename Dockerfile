@@ -34,7 +34,7 @@ RUN addgroup --system --gid 1001 bun
 RUN adduser --system --uid 1001 bun
 
 COPY --from=optim-stage /usr/local/bin/bun /usr/local/bin/
-COPY --from=build-stage /app/public /app/publci
+COPY --from=build-stage /app/public /app/public
 COPY --from=build-stage --chown=bun:bun /app/.next/standalone /app/
 COPY --from=build-stage --chown=bun:bun /app/.next/static /app/.next/static
 
