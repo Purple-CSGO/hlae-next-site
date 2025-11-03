@@ -18,9 +18,10 @@ import {
 import useDMStore from './store'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ChevronsUpDown, Check } from 'lucide-react'
-import { Key, use, useState } from 'react'
+import { ChevronsUpDown, Check, Save, RefreshCcw, Loader } from 'lucide-react'
+import { Key, useState } from 'react'
 import { Button, Chip, Input, NumberInput, Switch, Tab, Tabs, cn } from '@heroui/react'
+import { IoSwapHorizontal } from 'react-icons/io5'
 
 export default function Page() {
   return (
@@ -67,7 +68,7 @@ function SettingPanel() {
       <div className="flex flex-col flex-wrap flex-grow gap-3">
         <div className="flex gap-4">
           <H3>偏好设置</H3>
-          <Button size="sm" onPress={() => reset()} className="font-semibold">
+          <Button size="sm" variant="flat" onPress={() => reset()} className="font-semibold">
             重置
           </Button>
         </div>
@@ -113,16 +114,19 @@ function DeathNoticePanel() {
     <section className="flex flex-col w-full gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
       <div className="flex flex-wrap items-start gap-4">
         <H3>击杀信息调整</H3>
-        <Button size="sm" onPress={() => saveDNotices()} className="font-semibold">
+        <Button size="sm" variant="flat" onPress={() => saveDNotices()} className="font-semibold gap-1">
+          <Save size={14} />
           保存数据
         </Button>
-        <Button size="sm" onPress={() => loadDNotices('')} className="font-semibold">
+        <Button size="sm" variant="flat" onPress={() => loadDNotices('')} className="font-semibold gap-1">
+          <Loader size={14} />
           加载数据
         </Button>
-        <Button size="sm" onPress={() => resetDNotices()} className="font-semibold">
+        <Button size="sm" variant="flat" onPress={() => resetDNotices()} className="font-semibold gap-1">
+          <RefreshCcw size={14} />
           恢复默认
         </Button>
-        <Button size="sm" onPress={() => generateDNotice()} className="font-semibold">
+        <Button size="sm" color="secondary" variant="flat" onPress={() => generateDNotice()} className="font-semibold">
           生成击杀
         </Button>
         <Button size="sm" color="primary" variant="flat" onPress={() => addDNotice(DefaultDeathMsg)} className="ml-auto font-semibold">
@@ -155,7 +159,18 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
         <Input variant="flat" size="sm" value={deathNotice.attacker} onChange={e => setDNotice(index, { ...deathNotice, attacker: e.target.value })} />
       </li>
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
-        <p>受害者</p>
+        <p className="w-full flex  items-center justify-between">
+          受害者
+          <Button
+            variant="flat"
+            size="sm"
+            className=" gap-1 font-semibold"
+            onPress={() => setDNotice(index, { ...deathNotice, attacker: deathNotice.victim, victim: deathNotice.attacker })}
+          >
+            <IoSwapHorizontal size={14} />
+            交换
+          </Button>
+        </p>
         <Input variant="flat" size="sm" value={deathNotice.victim} onChange={e => setDNotice(index, { ...deathNotice, victim: e.target.value })} />
       </li>
       <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
@@ -313,7 +328,7 @@ function CS2DeathNoticeItem({ dNotice, index, hide }: { dNotice: DeathMsg; index
     <li
       key={index}
       className={cn(
-        'flex flex-row items-center justify-center gap-1 px-2 py-1 h-8 text-sm leading-6 backdrop-blur font-bold font-[Stratum2] rounded text-white bg-black/65',
+        'flex flex-row items-center justify-center gap-1 px-2 py-2 h-8 text-sm leading-6 backdrop-blur font-bold font-[Stratum2] rounded text-white bg-black/65',
         dNotice.redBorder && 'border-2 border-[#e10000]',
         hide && dNotice.hide && 'invisible'
       )}
