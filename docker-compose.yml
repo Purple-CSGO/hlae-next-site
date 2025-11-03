@@ -1,0 +1,20 @@
+services:
+  hlae-next-site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hlae-next-site-test
+    ports:
+      - "3080:3000"
+    environment:
+      - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'bun.*server.js' > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
