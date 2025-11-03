@@ -6,7 +6,7 @@ export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
   document.documentElement.scrollTop = 0
   document.documentElement.scrollLeft = 0
   document.body.scrollTop = 0
-  
+
   // 保存原始样式
   const originalPosition = e.style.position
   const originalTop = e.style.top
@@ -14,7 +14,7 @@ export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
   const originalLeft = e.style.left
   const originalRight = e.style.right
   const originalVisibility = e.style.visibility
-  
+
   try {
     // 临时调整元素位置，确保在视口内可见
     e.style.position = 'relative'
@@ -23,12 +23,12 @@ export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
     e.style.left = '0'
     e.style.right = 'auto'
     e.style.visibility = 'visible'
-    
+
     // 等待样式应用
     await new Promise(resolve => setTimeout(resolve, 10))
-    
+
     const dataUrl = await toPng(e, {
-      backgroundColor: null, // 使用 null 来生成透明背景
+      backgroundColor: 'transparent', // 透明背景
       pixelRatio: dpi,
       quality: 1.0,
       style: {
@@ -36,7 +36,7 @@ export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
         lineHeight: 'normal',
       },
     })
-    
+
     if (dataUrl !== '') {
       const link = document.createElement('a')
       link.href = dataUrl
@@ -45,10 +45,10 @@ export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
 
       document.body.appendChild(link)
       link.click()
-      
+
       // 等待一小段时间确保下载已触发，然后再移除元素
       await new Promise(resolve => setTimeout(resolve, 100))
-      
+
       // 确保元素存在且仍在 DOM 中再移除
       if (link.parentNode) {
         document.body.removeChild(link)
