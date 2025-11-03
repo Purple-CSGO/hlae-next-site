@@ -3,8 +3,16 @@ import { portalData } from './data/portal'
 import { H1, H2 } from './ui/Heading'
 import { resourceData } from './data/resource'
 import { FaGithub } from 'react-icons/fa'
+import Image from 'next/image'
+import type { Metadata } from 'next'
 
-export const revalidate = 10800 // 3 hours
+// ISR：3小时重新验证，使用 stale-while-revalidate 策略
+export const revalidate = 10800
+
+export const metadata: Metadata = {
+  title: '首页',
+  description: 'CS等起源引擎游戏的影片制作工具HLAE的中文门户网站',
+}
 
 export default function Home() {
   return (
@@ -50,7 +58,7 @@ function Hero() {
           target="_blank"
           className="pl-3 pr-4 py-2 flex flex-row justify-center items-center rounded-full font-semibold transition duration-200 active:scale-95 text-[#fff] bg-[#CA4940] hover:bg-[#B33B32]"
         >
-          <img src="/icon/hlae.svg" alt="project" className="w-6 h-6" />
+          <Image src="/icon/hlae.svg" alt="HLAE Logo" width={24} height={24} className="w-6 h-6" unoptimized priority />
           官方网站
         </a>
         <a

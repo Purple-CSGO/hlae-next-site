@@ -26,6 +26,19 @@
         "reveal": "always",
         "panel": "shared"
       }
+    },
+    {
+      "label": "Docker Pack Up",
+      "type": "shell",
+      "command": "docker save purp1e/hlae-next-site:latest | gzip > ~/hlae-next-site_latest.tar.gz",
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     }
   ]
 }

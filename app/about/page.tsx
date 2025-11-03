@@ -1,4 +1,13 @@
 import { H2 } from '../ui/Heading'
+import type { Metadata } from 'next'
+
+// 静态页面，完全静态生成，缓存1天
+export const revalidate = 86400
+
+export const metadata: Metadata = {
+  title: '关于',
+  description: 'HLAE中文站 —— CS视频制作相关导航与资源集合的中文门户网站',
+}
 
 export default function About() {
   return (

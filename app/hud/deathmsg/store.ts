@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { CStrikeDefaultDeathMsgs, DeathMsg, DefaultDeathMsgs } from './dmsg'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import html2canvas from 'html2canvas'
 import { Canvas2Image } from './canvas'
 import { addToast } from '@heroui/react'
 
@@ -78,8 +77,16 @@ const useDMStore = create<DMState>()(
         const a = document.createElement('a')
         a.href = url
         a.download = get().prefix + '_dNotices.json'
+        a.style.display = 'none'
+        document.body.appendChild(a)
         a.click()
-        URL.revokeObjectURL(url)
+        // 等待一小段时间确保下载已触发，然后再移除元素
+        setTimeout(() => {
+          if (a.parentNode) {
+            document.body.removeChild(a)
+          }
+          URL.revokeObjectURL(url)
+        }, 100)
       },
       loadDNotices: (json: string) => {
         // 上传文件并读取json
@@ -87,7 +94,8 @@ const useDMStore = create<DMState>()(
         // set({ dNotices: JSON.parse(json).dNotices })
       },
       generateDNotice: async () => {
-        const { w, h, hidpi, prefix, dNotices } = get()
+        const { w, h, hidpi, prefix, dNotices, cstrikeDNotices, gameType } = get()
+        const currentDNotices = gameType === 'cs2' ? dNotices : cstrikeDNotices
 
         // html2canvas获取元素、生成图片、并跳转下载
         const e = document.getElementById('deathnotice')
@@ -104,44 +112,51 @@ const useDMStore = create<DMState>()(
 
         const mockLayoutGeneration = async () => {
           // 生成过程 模拟游戏布局
-          for (let i = 0; i < dNotices.length; i++) {
+          for (let i = 0; i < currentDNotices.length; i++) {
             // 隐藏其他击杀条
-            for (let j = 0; j < dNotices.length; j++) {
-              get().setDNotice(j, { ...dNotices[j], hide: j !== i })
+            for (let j = 0; j < currentDNotices.length; j++) {
+              const dNotice = currentDNotices[j]
+              get().setDNotice(j, { ...dNotice, hide: j !== i })
             }
 
             await sleep(50)
 
-            Canvas2Image(e, prefix + '-' + i, dpi)
+            await Canvas2Image(e, prefix + '-' + (i + 1), dpi)
           }
 
-          for (let j = 0; j < dNotices.length; j++) {
-            get().setDNotice(j, { ...dNotices[j], hide: false })
+          for (let j = 0; j < currentDNotices.length; j++) {
+            const dNotice = currentDNotices[j]
+            get().setDNotice(j, { ...dNotice, hide: false })
           }
         }
 
         const simpleGeneration = async () => {
           // 分别渲染 DeathNoticeRender 的所有 li组件，并下载png
-          for (let i = 0; i < dNotices.length; i++) {
-            get().setDNotice(i, { ...dNotices[i], hide: false })
+          for (let i = 0; i < currentDNotices.length; i++) {
+            get().setDNotice(i, { ...currentDNotices[i], hide: false })
           }
 
           const dnList = e.getElementsByTagName('li')
           let i = 1
           for (const dn of dnList) {
             await sleep(10)
-            Canvas2Image(dn, prefix + '-' + i, dpi)
+            await Canvas2Image(dn, prefix + '-' + i, dpi)
             i++
           }
         }
 
-        if (get().mockLayout) {
-          mockLayoutGeneration()
-        } else {
-          simpleGeneration()
+        try {
+          if (get().mockLayout) {
+            await mockLayoutGeneration()
+          } else {
+            await simpleGeneration()
+          }
+        } finally {
+          // 确保 style 元素被移除
+          if (style.parentNode) {
+            style.remove()
+          }
         }
-
-        style.remove()
         addToast({
           title: '生成成功',
           description: '请查看下载文件夹',
