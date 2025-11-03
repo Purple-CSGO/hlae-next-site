@@ -201,46 +201,85 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
       <li className="col-span-4 flex flex-col gap-1.5">
         <p>图标</p>
         <ul className="flex gap-2 rounded-lg">
-          {PrefixIconValues.map(item => (
-            <li key={item}>
-              <button
-                type="button"
-                onClick={() =>
-                  deathNotice.prefixIcons.includes(item)
-                    ? setDNotice(index, { ...deathNotice, prefixIcons: deathNotice.prefixIcons.filter(i => i !== item) })
-                    : setDNotice(index, { ...deathNotice, prefixIcons: [...deathNotice.prefixIcons, item] })
-                }
-                aria-label={`切换前缀图标 ${item}`}
-                aria-pressed={deathNotice.prefixIcons.includes(item)}
-                className={cn(
-                  'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
-                  deathNotice.prefixIcons.includes(item) && 'bg-zinc-500 dark:bg-zinc-400'
-                )}
-              >
-                <img src={`/cs2/deathnotice/${item}.svg`} alt={`前缀图标 ${item}`} className="w-full h-full" />
-              </button>
-            </li>
-          ))}
-          {SuffixIconValues.map(item => (
-            <li key={item}>
-              <button
-                type="button"
-                onClick={() =>
-                  deathNotice.suffixIcons.includes(item)
-                    ? setDNotice(index, { ...deathNotice, suffixIcons: deathNotice.suffixIcons.filter(i => i !== item) })
-                    : setDNotice(index, { ...deathNotice, suffixIcons: [...deathNotice.suffixIcons, item] })
-                }
-                aria-label={`切换后缀图标 ${item}`}
-                aria-pressed={deathNotice.suffixIcons.includes(item)}
-                className={cn(
-                  'w-8 h-8 p-1.5 rounded-lg text-black bg-zinc-300 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-400 transition active:scale-95',
-                  deathNotice.suffixIcons.includes(item) && 'bg-zinc-500 dark:bg-zinc-400'
-                )}
-              >
-                <img src={`/cs2/deathnotice/${item}.svg`} alt={`后缀图标 ${item}`} className="w-full h-full" />
-              </button>
-            </li>
-          ))}
+          {PrefixIconValues.map(item => {
+            const isSelected = deathNotice.prefixIcons.includes(item)
+            return (
+              <li key={item}>
+                <button
+                  type="button"
+                  onClick={() =>
+                    isSelected
+                      ? setDNotice(index, { ...deathNotice, prefixIcons: deathNotice.prefixIcons.filter(i => i !== item) })
+                      : setDNotice(index, { ...deathNotice, prefixIcons: [...deathNotice.prefixIcons, item] })
+                  }
+                  aria-label={`切换前缀图标 ${item}`}
+                  aria-pressed={isSelected}
+                  className={cn(
+                    'w-8 h-8 p-1.5 rounded-lg cursor-pointer transition active:scale-95 border',
+                    isSelected
+                      ? 'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700'
+                      : 'bg-blue-50 dark:bg-blue-950/30 border-blue-100 dark:border-blue-800/50 hover:bg-blue-100 dark:hover:bg-blue-900/40'
+                  )}
+                >
+                  <img
+                    src={`/cs2/deathnotice/${item}.svg`}
+                    alt={`前缀图标 ${item}`}
+                    className="w-full h-full transition-all"
+                    style={
+                      isSelected
+                        ? {
+                            filter: 'brightness(0) saturate(100%) invert(45%) sepia(60%) saturate(800%) hue-rotate(180deg) brightness(95%) grayscale(20%)',
+                          }
+                        : {
+                            filter:
+                              'brightness(0) saturate(100%) invert(45%) sepia(60%) saturate(800%) hue-rotate(180deg) brightness(95%) grayscale(20%) opacity(0.2)',
+                          }
+                    }
+                  />
+                </button>
+              </li>
+            )
+          })}
+          {SuffixIconValues.map(item => {
+            const isSelected = deathNotice.suffixIcons.includes(item)
+            return (
+              <li key={item}>
+                <button
+                  type="button"
+                  onClick={() =>
+                    isSelected
+                      ? setDNotice(index, { ...deathNotice, suffixIcons: deathNotice.suffixIcons.filter(i => i !== item) })
+                      : setDNotice(index, { ...deathNotice, suffixIcons: [...deathNotice.suffixIcons, item] })
+                  }
+                  aria-label={`切换后缀图标 ${item}`}
+                  aria-pressed={isSelected}
+                  className={cn(
+                    'w-8 h-8 p-1.5 rounded-lg cursor-pointer transition active:scale-95 border',
+                    isSelected
+                      ? 'bg-orange-100 dark:bg-orange-900/30 border-orange-300 dark:border-orange-700'
+                      : 'bg-orange-50 dark:bg-orange-950/30 border-orange-100 dark:border-orange-800/50 hover:bg-orange-100 dark:hover:bg-orange-900/40'
+                  )}
+                >
+                  <img
+                    src={`/cs2/deathnotice/${item}.svg`}
+                    alt={`后缀图标 ${item}`}
+                    className="w-full h-full transition-all"
+                    style={
+                      isSelected
+                        ? {
+                            filter:
+                              'brightness(0) saturate(100%) invert(55%) sepia(50%) saturate(700%) hue-rotate(350deg) brightness(90%) contrast(98%) grayscale(25%)',
+                          }
+                        : {
+                            filter:
+                              'brightness(0) saturate(100%) invert(55%) sepia(50%) saturate(700%) hue-rotate(350deg) brightness(90%) contrast(98%) grayscale(25%) opacity(0.25)',
+                          }
+                    }
+                  />
+                </button>
+              </li>
+            )
+          })}
         </ul>
       </li>
       <li className="col-span-2 mt-auto ml-auto space-x-2 flex">
@@ -262,7 +301,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
             variant="flat"
             size="sm"
             onPress={() => setDNotice(index, { ...deathNotice, redBorder: !deathNotice.redBorder })}
-            className={cn('font-semibold gap-1', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100')}
+            className={cn('font-semibold gap-1', deathNotice.redBorder && 'border-red-500 border text-red-400 bg-red-100 dark:bg-red-900/30')}
           >
             <Square size={14} />
             红框
@@ -325,12 +364,14 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild className="">
         <Button variant="flat" size="sm" role="combobox" aria-expanded={open} aria-label="选择武器" className="justify-between w-full px-1.5">
-          <img
-            src={gameType === 'cs2' ? `/cs2/weapon/${value}.svg` : `/cstrike/weapon/${value}.png`}
-            alt={value ? `武器 ${valueMap[value] || value}` : '未选择武器'}
-            className={cn(gameType === 'cs2' ? 'w-6 h-6 p-1' : 'h-6 p-0', 'rounded bg-zinc-400 dark:bg-zinc-600')}
-          />
-          <span className="flex-grow text-left">{value ? valueMap[value] || value : '选择武器'}</span>
+          {value && (
+            <img
+              src={gameType === 'cs2' ? `/cs2/weapon/${value}.svg` : `/cstrike/weapon/${value}.png`}
+              alt={value ? `武器 ${valueMap[value] || value}` : '未选择武器'}
+              className={cn(gameType === 'cs2' ? 'h-6 p-0.5 invert-[0.7] dark:invert-[0.2]' : 'h-6 p-0', 'rounded')}
+            />
+          )}
+          <span className="flex-grow text-left font-medium">{value ? valueMap[value] || value : '选择武器'}</span>
           <ChevronsUpDown className="w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -350,11 +391,13 @@ function SelectSearch({ value, onChange, values, valueMap }: SelectSearchProps) 
                   }}
                   className="p-1 cursor-pointer"
                 >
-                  <img
-                    src={gameType === 'cs2' ? `/cs2/weapon/${v}.svg` : `/cstrike/weapon/${v}.png`}
-                    alt="suffix"
-                    className={cn(gameType === 'cs2' ? 'w-6 h-6 p-1' : 'h-6 w-16 p-0', 'bg-contain rounded bg-zinc-400')}
-                  />
+                  <span className="min-w-10">
+                    <img
+                      src={gameType === 'cs2' ? `/cs2/weapon/${v}.svg` : `/cstrike/weapon/${v}.png`}
+                      alt="weapon"
+                      className={cn(gameType === 'cs2' ? 'h-6 max-w-10 p-0.5 invert-[0.7] dark:invert-[0.2]' : 'h-6 w-16 p-0', 'bg-contain rounded ')}
+                    />
+                  </span>
                   {valueMap[v] || v}
                   <Check className={cn('ml-auto', value === v ? 'opacity-100' : 'opacity-0')} />
                 </CommandItem>
