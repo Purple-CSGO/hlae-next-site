@@ -44,6 +44,13 @@ export const portalData: CardProps[] = [
     background: true,
   },
   {
+    title: '击杀信息生成',
+    url: '/hud/deathmsg',
+    desc: 'CS2 · CS 击杀信息生成工具（测试）',
+    icon: 'pi pi-sliders-h',
+    background: true,
+  },
+  {
     title: '比赛录像分享',
     url: 'https://share.hlae.site/%E5%BD%95%E5%83%8F',
     desc: '比赛录像搬运、加速下载',

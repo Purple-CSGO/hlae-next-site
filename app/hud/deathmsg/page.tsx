@@ -54,7 +54,7 @@ function GameTypeTabs() {
         title={
           <div className="flex items-center space-x-2 px-2">
             <span>CStrike</span>
-            <Chip size="sm">开发中</Chip>
+            <Chip size="sm">测试中</Chip>
           </div>
         }
       />
