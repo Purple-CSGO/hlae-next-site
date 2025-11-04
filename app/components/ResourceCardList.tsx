@@ -1,6 +1,6 @@
-import { Card } from '../ui/Card'
 import { CardProps } from '../ui/Card'
 import { resourceData } from '../data/resource'
+import { ResourceCard } from './ResourceCard'
 
 interface LatestRelease {
   repo: string
@@ -19,10 +19,14 @@ interface ApiResponse {
   }>
 }
 
-async function getResourceData(): Promise<CardProps[]> {
+export interface ResourceCardData extends CardProps {
+  releaseInfo?: LatestRelease
+}
+
+async function getResourceData(): Promise<ResourceCardData[]> {
   // 从 resourceData 中提取所有 github_repo
   const repos = resourceData.map(item => item.github_repo).filter(repo => repo && repo.includes('/')) // 过滤掉无效的 repo
-  if (repos.length === 0) return resourceData
+  if (repos.length === 0) return resourceData.map(item => ({ ...item }))
 
   try {
     // 调用 API 获取最新版本信息
@@ -43,20 +47,24 @@ async function getResourceData(): Promise<CardProps[]> {
 
     const apiData: ApiResponse = await response.json()
 
-    // 将版本信息合并到 resourceData 中
-    const repoVersionMap = new Map<string, string>()
+    // 将版本信息和完整的 release 信息合并到 resourceData 中
+    const repoReleaseMap = new Map<string, LatestRelease>()
     apiData.results.forEach(result => {
       if (result.success && result.latest_release) {
-        repoVersionMap.set(result.repo, result.latest_release.latest_version)
+        repoReleaseMap.set(result.repo, result.latest_release)
       }
     })
 
-    return resourceData.map(item => ({
-      ...item,
-      version: repoVersionMap.get(item.github_repo || '') || item.version,
-    }))
+    return resourceData.map(item => {
+      const releaseInfo = item.github_repo ? repoReleaseMap.get(item.github_repo) : undefined
+      return {
+        ...item,
+        version: releaseInfo?.latest_version || item.version,
+        releaseInfo: releaseInfo,
+      }
+    })
   } catch (error) {
-    return resourceData
+    return resourceData.map(item => ({ ...item }))
   }
 }
 
@@ -66,7 +74,7 @@ export async function ResourceCardList() {
   return (
     <ul className="grid items-center justify-center w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {data.map((item, index) => (
-        <Card {...item} key={index} />
+        <ResourceCard {...item} key={index} />
       ))}
     </ul>
   )
