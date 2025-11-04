@@ -1,18 +1,22 @@
 import { Card } from './ui/Card'
 import { portalData } from './data/portal'
 import { H1, H2 } from './ui/Heading'
-import { resourceData } from './data/resource'
+import { ResourceCardList } from './components/ResourceCardList'
+import { ResourceCardListLoading } from './components/ResourceCardListLoading'
 import { FaGithub } from 'react-icons/fa'
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 
 // ISR：3小时重新验证，使用 stale-while-revalidate 策略
 export const revalidate = 10800
 
 export const metadata: Metadata = {
-  title: '首页',
+  title: {
+    default: 'HLAE中文站',
+    template: '%s - HLAE中文站',
+  },
   description: 'CS等起源引擎游戏的影片制作工具HLAE的中文门户网站',
 }
-
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen row-start-2 gap-20 py-32 mx-auto sm:items-start">
@@ -33,11 +37,9 @@ export default function Home() {
 
       <section className="flex flex-col items-center justify-center w-full max-w-screen-lg gap-8 px-8 mx-auto">
         <H2 className="text-zinc-950 dark:text-zinc-100">资源下载</H2>
-        <ul className="grid items-center justify-center w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {resourceData.map((data, index) => (
-            <Card {...data} key={index} />
-          ))}
-        </ul>
+        <Suspense fallback={<ResourceCardListLoading />}>
+          <ResourceCardList />
+        </Suspense>
       </section>
     </main>
   )

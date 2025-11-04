@@ -3,6 +3,7 @@ import { CardProps } from '@/app/ui/Card'
 export const resourceData: CardProps[] = [
   {
     title: 'HLAE',
+    github_repo: 'advancedfx/advancedfx',
     url: 'https://github.com/advancedfx/advancedfx',
     desc: '起源游戏影片制作工具',
     background: false,
@@ -12,6 +13,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'FFmpeg',
+    github_repo: 'GyanD/codexffmpeg',
     url: 'https://ffmpeg.org',
     desc: '免费开源的全能媒体转码工具',
     background: false,
@@ -21,6 +23,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'CFG预设 For CS2',
+    github_repo: 'Purple-CSGO/CS2-Config-Presets',
     url: 'https://config.upup.cool/v2',
     desc: '适用于CS2各场景的Config预设',
     background: true,
@@ -30,6 +33,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'CS Demo Manager',
+    github_repo: 'akiver/CS-Demo-Manager',
     url: 'https://cs-demo-manager.com',
     desc: 'CS录像分析观看工具',
     background: true,
@@ -40,6 +44,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'CS工具箱',
+    github_repo: 'plsgo/cstb',
     url: 'https://cstb.upup.cool',
     desc: '一个为CS游戏各个方面带来便利的工具集合',
     background: true,
@@ -49,6 +54,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'HLAE Studio',
+    github_repo: 'One-Studio/HLAE-Studio',
     url: 'https://github.com/One-Studio/HLAE-Studio',
     desc: 'HLAE环境配置更新工具',
     version: 'v1.1.0',
@@ -59,6 +65,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'CFG预设',
+    github_repo: 'Purple-CSGO/CSGO-Config-Presets',
     url: 'https://config.upup.cool',
     desc: '适用于CSGO各场景的Config预设',
     background: true,
@@ -68,6 +75,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'nskinz',
+    github_repo: 'advancedfx/nSkinz',
     url: 'https://github.com/advancedfx/nskinz',
     desc: 'CSGO皮肤修改替换插件 advancedfx维护版本',
     background: true,
@@ -95,6 +103,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'ReShade AFX',
+    github_repo: 'advancedfx/ReShade_advancedfx',
     url: 'https://github.com/advancedfx/ReShade_advancedfx',
     desc: '连接HLAE录制的ReShade插件',
     background: false,
@@ -122,6 +131,7 @@ export const resourceData: CardProps[] = [
   },
   {
     title: 'SRadar',
+    github_repo: 'zuoshipinSHEKL/SRadar',
     url: 'https://sdr.hlae.cn',
     desc: 'Shekl制作的简易雷达',
     background: true,

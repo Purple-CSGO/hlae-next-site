@@ -6,6 +6,7 @@ import Image from 'next/image'
 
 export interface CardProps {
   title: string
+  github_repo?: string
   url: string
   desc: string
   icon?: string
@@ -35,7 +36,7 @@ export function Card({ title, url, desc, icon, version, background, download_cdn
         <div className="flex gap-x-2 gap-y-1 flex-wrap items-center">
           <H4 className="cursor-pointer hover:underline underline-offset-4 text-zinc-950 dark:text-zinc-200">{title}</H4>
           {version && (
-            <div className="px-1.5 text-xs flex items-center text-zinc-500 bg-zinc-200 dark:bg-white/30 dark:border-white/10 rounded-lg tracking-wider max-w-fit max-h-fit">
+            <div className="px-1.5 text-xs flex items-center text-zinc-500 dark:text-zinc-200 bg-zinc-200 dark:bg-white/30 dark:border-white/10 rounded-lg tracking-wider max-w-fit max-h-fit">
               {version}
             </div>
           )}
