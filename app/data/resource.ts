@@ -24,7 +24,7 @@ export const resourceData: CardProps[] = [
   {
     title: 'CFG预设 For CS2',
     github_repo: 'Purple-CSGO/CS2-Config-Presets',
-    url: 'https://config.upup.cool/v2',
+    url: 'https://cfg.upup.cool/v2',
     desc: '适用于CS2各场景的Config预设',
     background: true,
     download_cdn: 'https://api.upup.cool/get/cs2-cfg',
@@ -66,7 +66,7 @@ export const resourceData: CardProps[] = [
   {
     title: 'CFG预设',
     github_repo: 'Purple-CSGO/CSGO-Config-Presets',
-    url: 'https://config.upup.cool',
+    url: 'https://cfg.upup.cool',
     desc: '适用于CSGO各场景的Config预设',
     background: true,
     download_cdn: 'https://api.upup.cool/get/csgo-cfg',
