@@ -8,7 +8,7 @@ interface LatestRelease {
   latest_version: string
   changelog: string
   published_at: string
-  attachments: [string, string][] // [文件名, URL] 的数组
+  attachments: string[] // 仅 URL 列表
 }
 
 interface ApiResponse {
