@@ -8,7 +8,7 @@ import { Suspense } from 'react'
 import type { Metadata } from 'next'
 
 // ISR：3小时重新验证，使用 stale-while-revalidate 策略
-export const revalidate = 10800
+// export const revalidate = 10800
 
 export const metadata: Metadata = {
   title: {

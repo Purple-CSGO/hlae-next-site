@@ -2,6 +2,7 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  cacheComponents: true,
   experimental: {
     webpackMemoryOptimizations: true,
   },
@@ -12,7 +13,7 @@ const nextConfig: NextConfig = {
     // 添加图片优化格式支持
     formats: ['image/avif', 'image/webp'],
     // 增加图片缓存TTL到1小时，静态资源可以缓存更久
-    minimumCacheTTL: 3600,
+    minimumCacheTTL: 600,
     // 启用内容分发网络优化
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',

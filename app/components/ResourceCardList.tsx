@@ -1,7 +1,7 @@
 import { CardProps } from '../ui/Card'
 import { resourceData } from '../data/resource'
 import { ResourceCard } from './ResourceCard'
-import { unstable_cache } from 'next/cache'
+import { cacheLife, cacheTag } from 'next/cache'
 
 interface LatestRelease {
   repo: string
@@ -44,17 +44,13 @@ async function fetchResourceReleaseData(repos: string[]): Promise<ApiResponse> {
   return await response.json()
 }
 
-// 使用 unstable_cache 缓存 API 调用结果
-const getCachedResourceReleaseData = unstable_cache(
-  async (repos: string[]) => {
-    return fetchResourceReleaseData(repos)
-  },
-  ['resource-release-data'], // cache key
-  {
-    revalidate: 180, // 3 分钟
-    tags: ['resource-releases'], // 可选：用于按需重新验证
-  }
-)
+// 使用 use cache 缓存 API 调用结果（Next.js 16 稳定 API）
+async function getCachedResourceReleaseData(repos: string[]) {
+  'use cache'
+  cacheLife({ revalidate: 180 }) // 3 分钟
+  cacheTag('resource-releases') // 用于按需重新验证 revalidateTag('resource-releases')
+  return fetchResourceReleaseData(repos)
+}
 
 async function getResourceData(): Promise<ResourceCardData[]> {
   // 从 resourceData 中提取所有 github_repo，并确保类型安全
