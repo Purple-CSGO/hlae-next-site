@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Moon, Sun, Menu, X } from 'lucide-react'
 import { Button } from '@heroui/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function isBrowser() {
   return !!(typeof window !== 'undefined' && window.document && window.document.createElement)
@@ -18,6 +18,11 @@ export default function Nav() {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const shouldShow = pathname !== '/' || (scroll?.top || 0) > 140
 
@@ -50,8 +55,8 @@ export default function Nav() {
             <Link href="/about" className="font-semibold text-zinc-900 dark:text-zinc-100 text-md">
               关于
             </Link>
-            <Button size="sm" isIconOnly variant="light" onPress={() => setTheme(theme == 'dark' ? 'light' : 'dark')}>
-              {theme == 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            <Button size="sm" isIconOnly variant="light" onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+              {mounted && theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </Button>
           </ul>
 
@@ -88,8 +93,8 @@ export default function Nav() {
             </div>
             <nav className="flex-1 overflow-y-auto p-6">
               <ul className="flex flex-col gap-4">
-                {menuItems.map((item, index) => (
-                  <li key={`${item.href}-${index}`}>
+                {menuItems.map((item) => (
+                  <li key={item.href}>
                     <Link
                       href={item.href}
                       className={twMerge(
@@ -102,12 +107,26 @@ export default function Nav() {
                     </Link>
                   </li>
                 ))}
-                <li>
-                  <Button size="sm" variant="light" isIconOnly onPress={() => setTheme(theme == 'dark' ? 'light' : 'dark')} aria-label="切换主题">
-                    {theme == 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                  </Button>
-                </li>
               </ul>
+              <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+                <Button
+                  variant="flat"
+                  className="w-full justify-start gap-3"
+                  onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                >
+                  {mounted && theme === 'dark' ? (
+                    <>
+                      <Sun size={20} />
+                      <span>切换至浅色模式</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon size={20} />
+                      <span>切换至深色模式</span>
+                    </>
+                  )}
+                </Button>
+              </div>
             </nav>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { heroui } from '@heroui/react'
+import tailwindcssAnimate from 'tailwindcss-animate'
 
 export default {
   darkMode: ['class'],
@@ -19,5 +20,5 @@ export default {
       colors: {},
     },
   },
-  plugins: [heroui(), require('tailwindcss-animate')],
+  plugins: [heroui(), tailwindcssAnimate],
 } satisfies Config

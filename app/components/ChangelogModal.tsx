@@ -22,9 +22,8 @@ interface ChangelogModalProps {
 }
 
 export function ChangelogModal({ isOpen, onClose, releaseInfo, title }: ChangelogModalProps) {
-  if (!releaseInfo) return null
-
   const [useCdn, setUseCdn] = useState(false)
+  if (!releaseInfo) return null
   const cdnize = (url: string) => (useCdn ? `https://cdn.upup.cool/${url}` : url)
 
   const parseFilenameFromUrl = (url: string) => {
@@ -77,6 +76,7 @@ export function ChangelogModal({ isOpen, onClose, releaseInfo, title }: Changelo
             <ModalBody className="pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 <ReactMarkdown
+                  disallowedElements={['script']}
                   components={{
                     a: ({ ...props }) => (
                       <a
@@ -114,9 +114,9 @@ export function ChangelogModal({ isOpen, onClose, releaseInfo, title }: Changelo
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {normalizedAttachments.map(({ name, url }, index) => (
+                    {normalizedAttachments.map(({ name, url }) => (
                       <Button
-                        key={index}
+                        key={url}
                         as="a"
                         href={cdnize(url)}
                         target="_blank"

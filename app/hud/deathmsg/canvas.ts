@@ -1,11 +1,12 @@
 import { toPng } from 'html-to-image'
 
 export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
+  // 记录原始滚动位置
+  const scrollX = window.scrollX
+  const scrollY = window.scrollY
+
   // 滚动条置顶解决生成图片不全的问题
-  window.scrollY = 0
-  document.documentElement.scrollTop = 0
-  document.documentElement.scrollLeft = 0
-  document.body.scrollTop = 0
+  window.scrollTo(0, 0)
 
   // 保存原始样式
   const originalPosition = e.style.position
@@ -64,5 +65,8 @@ export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
     e.style.left = originalLeft
     e.style.right = originalRight
     e.style.visibility = originalVisibility
+
+    // 恢复滚动位置
+    window.scrollTo(scrollX, scrollY)
   }
 }

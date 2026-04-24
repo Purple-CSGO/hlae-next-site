@@ -49,25 +49,39 @@ const useDMStore = create<DMState>()(
       setGameType: (gameType: string) => set({ gameType }),
       reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成', dNotices: DefaultDeathMsgs, mockLayout: true }),
       setDNotices: (dNotices: DeathMsg[]) => {
-        get().gameType === 'cs2' ? set({ dNotices: dNotices }) : set({ cstrikeDNotices: dNotices })
+        if (get().gameType === 'cs2') {
+          set({ dNotices: dNotices })
+        } else {
+          set({ cstrikeDNotices: dNotices })
+        }
       },
       setDNotice: (index: number, dNotice: DeathMsg) => {
-        get().gameType === 'cs2'
-          ? set((state: DMState) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] }))
-          : set((state: DMState) => ({ cstrikeDNotices: [...state.cstrikeDNotices.slice(0, index), dNotice, ...state.cstrikeDNotices.slice(index + 1)] }))
+        if (get().gameType === 'cs2') {
+          set((state: DMState) => ({ dNotices: [...state.dNotices.slice(0, index), dNotice, ...state.dNotices.slice(index + 1)] }))
+        } else {
+          set((state: DMState) => ({ cstrikeDNotices: [...state.cstrikeDNotices.slice(0, index), dNotice, ...state.cstrikeDNotices.slice(index + 1)] }))
+        }
       },
       addDNotice: (dNotice: DeathMsg) => {
-        get().gameType === 'cs2'
-          ? set((state: DMState) => ({ dNotices: [...state.dNotices, dNotice] }))
-          : set((state: DMState) => ({ cstrikeDNotices: [...state.cstrikeDNotices, dNotice] }))
+        if (get().gameType === 'cs2') {
+          set((state: DMState) => ({ dNotices: [...state.dNotices, dNotice] }))
+        } else {
+          set((state: DMState) => ({ cstrikeDNotices: [...state.cstrikeDNotices, dNotice] }))
+        }
       },
       removeDNotice: (index: number) => {
-        get().gameType === 'cs2'
-          ? set((state: DMState) => ({ dNotices: state.dNotices.filter((_, i: number) => i !== index) }))
-          : set((state: DMState) => ({ cstrikeDNotices: state.cstrikeDNotices.filter((_, i: number) => i !== index) }))
+        if (get().gameType === 'cs2') {
+          set((state: DMState) => ({ dNotices: state.dNotices.filter((_, i: number) => i !== index) }))
+        } else {
+          set((state: DMState) => ({ cstrikeDNotices: state.cstrikeDNotices.filter((_, i: number) => i !== index) }))
+        }
       },
       resetDNotices: () => {
-        get().gameType === 'cs2' ? set({ dNotices: DefaultDeathMsgs }) : set({ cstrikeDNotices: CStrikeDefaultDeathMsgs })
+        if (get().gameType === 'cs2') {
+          set({ dNotices: DefaultDeathMsgs })
+        } else {
+          set({ cstrikeDNotices: CStrikeDefaultDeathMsgs })
+        }
       },
       saveDNotices: () => {
         const jsonData = JSON.stringify({ dNotices: get().gameType === 'cs2' ? get().dNotices : get().cstrikeDNotices })
