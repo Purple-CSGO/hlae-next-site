@@ -28,6 +28,7 @@ export interface ResourceCardData extends CardProps {
 async function fetchResourceReleaseData(repos: string[]): Promise<ApiResponse> {
   const response = await fetch('https://gh-info.okk.cool/repos/batch', {
     method: 'POST',
+    signal: AbortSignal.timeout(8000),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -87,8 +88,8 @@ export async function ResourceCardList() {
 
   return (
     <ul className="grid items-center justify-center w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {data.map((item, index) => (
-        <ResourceCard {...item} key={index} />
+      {data.map(item => (
+        <ResourceCard {...item} key={item.url} />
       ))}
     </ul>
   )

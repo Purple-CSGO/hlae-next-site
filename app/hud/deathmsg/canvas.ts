@@ -55,8 +55,6 @@ export async function Canvas2Image(e: HTMLElement, name: string, dpi: number) {
         document.body.removeChild(link)
       }
     }
-  } catch (error) {
-    console.error('生成 PNG 失败:', error)
   } finally {
     // 恢复原始样式
     e.style.position = originalPosition

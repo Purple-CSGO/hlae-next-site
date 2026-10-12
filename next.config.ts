@@ -3,6 +3,7 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   output: 'standalone',
   cacheComponents: true,
+  partialPrefetching: false, // 保持现有 Cache Components 应用的预取行为
   experimental: {
     webpackMemoryOptimizations: true,
   },

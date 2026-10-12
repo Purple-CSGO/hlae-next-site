@@ -3,6 +3,7 @@ import { CStrikeDefaultDeathMsgs, DeathMsg, DefaultDeathMsgs } from './dmsg'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { Canvas2Image } from './canvas'
 import { addToast } from '@heroui/react'
+import { parseDeathNotices } from './import-data'
 
 interface DMState {
   w: number
@@ -26,7 +27,7 @@ interface DMState {
   resetDNotices: () => void
   saveDNotices: () => void
   loadDNotices: (json: string) => void
-  generateDNotice: () => void
+  generateDNotice: () => Promise<void>
   setMockLayout: (mockLayout: boolean) => void
 }
 
@@ -47,7 +48,7 @@ const useDMStore = create<DMState>()(
       setHidpi: (hidpi: number) => set({ hidpi }),
       setPrefix: (prefix: string) => set({ prefix }),
       setGameType: (gameType: string) => set({ gameType }),
-      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成', dNotices: DefaultDeathMsgs, mockLayout: true }),
+      reset: () => set({ w: 1920, h: 1080, hidpi: 2, prefix: '击杀生成', mockLayout: true }),
       setDNotices: (dNotices: DeathMsg[]) => {
         if (get().gameType === 'cs2') {
           set({ dNotices: dNotices })
@@ -84,7 +85,7 @@ const useDMStore = create<DMState>()(
         }
       },
       saveDNotices: () => {
-        const jsonData = JSON.stringify({ dNotices: get().gameType === 'cs2' ? get().dNotices : get().cstrikeDNotices })
+        const jsonData = JSON.stringify({ gameType: get().gameType, dNotices: get().gameType === 'cs2' ? get().dNotices : get().cstrikeDNotices })
         // 弹出下载
         const blob = new Blob([jsonData], { type: 'application/json' })
         const url = URL.createObjectURL(blob)
@@ -103,9 +104,7 @@ const useDMStore = create<DMState>()(
         }, 100)
       },
       loadDNotices: (json: string) => {
-        // 上传文件并读取json
-        // 弹出文件上传对话框
-        // set({ dNotices: JSON.parse(json).dNotices })
+        get().setDNotices(parseDeathNotices(json, get().gameType))
       },
       generateDNotice: async () => {
         const { w, h, hidpi, prefix, dNotices, cstrikeDNotices, gameType } = get()
@@ -160,12 +159,19 @@ const useDMStore = create<DMState>()(
         }
 
         try {
+          await document.fonts.ready
           if (get().mockLayout) {
             await mockLayoutGeneration()
           } else {
             await simpleGeneration()
           }
+        } catch (error) {
+          addToast({ title: '生成失败', description: error instanceof Error ? error.message : '请重试', color: 'danger' })
+          return
         } finally {
+          // 无论导出是否成功，都恢复原始的隐藏状态。
+          if (gameType === 'cs2') set({ dNotices: currentDNotices })
+          else set({ cstrikeDNotices: currentDNotices })
           // 确保 style 元素被移除
           if (style.parentNode) {
             style.remove()

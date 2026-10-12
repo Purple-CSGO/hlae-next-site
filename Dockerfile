@@ -12,7 +12,7 @@ RUN upx --no-lzma bun
 # 依赖
 FROM base AS dependency-stage
 WORKDIR /app
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile --registry=https://registry.npmmirror.com
 
 # 构建

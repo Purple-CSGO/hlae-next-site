@@ -5,6 +5,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import {
   DeathMsg,
   DefaultDeathMsg,
+  CStrikeDefaultDeathMsg,
   CS2PrefixIconValues,
   CS2SuffixIconValues,
   CS2Weapon,
@@ -21,8 +22,8 @@ import useDMStore from './store'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronsUpDown, Check, Save, RefreshCcw, Loader, RotateCcw, Plus, Sparkles, Trash2, Square } from 'lucide-react'
-import { Key, useState } from 'react'
-import { Button, Chip, Input, NumberInput, Switch, Tab, Tabs, cn } from '@heroui/react'
+import { Key, useRef, useState } from 'react'
+import { addToast, Button, Chip, Input, NumberInput, Switch, Tab, Tabs, cn } from '@heroui/react'
 import { IoSwapHorizontal } from 'react-icons/io5'
 
 export default function Page() {
@@ -33,7 +34,7 @@ export default function Page() {
       <GameTypeTabs />
       {/* <p className="text-zinc-900 dark:text-zinc-100">施工中... 功能尚未完善</p> */}
 
-      <div className="flex flex-row flex-wrap gap-6 pt-4">
+      <div className="flex w-full min-w-0 flex-row flex-wrap gap-6 pt-4">
         <SettingPanel />
         <PreviewPanel />
         <DeathNoticePanel />
@@ -77,15 +78,15 @@ function SettingPanel() {
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">宽</a>
-          <NumberInput labelPlacement="outside" size="sm" value={w} onValueChange={e => setW(e)} aria-label="宽度" />
+          <NumberInput labelPlacement="outside" size="sm" minValue={1} value={w} onValueChange={e => setW(e)} aria-label="宽度" />
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">高</a>
-          <NumberInput labelPlacement="outside" size="sm" value={h} onValueChange={h => setH(h)} aria-label="高度" />
+          <NumberInput labelPlacement="outside" size="sm" minValue={1} value={h} onValueChange={h => setH(h)} aria-label="高度" />
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">渲染倍率</a>
-          <NumberInput labelPlacement="outside" size="sm" value={hidpi} onValueChange={hidpi => setHidpi(hidpi)} aria-label="渲染倍率" />
+          <NumberInput labelPlacement="outside" size="sm" minValue={1} maxValue={4} value={hidpi} onValueChange={hidpi => setHidpi(hidpi)} aria-label="渲染倍率" />
         </div>
         <div className="flex flex-row items-center gap-2">
           <a className="min-w-24 text-sm">文件名前缀</a>
@@ -102,7 +103,7 @@ function SettingPanel() {
 
 function PreviewPanel() {
   return (
-    <section className="flex flex-col flex-grow gap-6 p-6 border border-zinc-300 dark:border-zinc-600 rounded-md dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100">
+    <section className="flex min-w-0 max-w-full overflow-x-auto flex-col flex-grow gap-6 p-6 border border-zinc-300 dark:border-zinc-600 rounded-md dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100">
       <H3>预览</H3>
       <DeathNoticeRender />
     </section>
@@ -111,17 +112,37 @@ function PreviewPanel() {
 
 function DeathNoticePanel() {
   const { dNotices, setDNotice, cstrikeDNotices, saveDNotices, loadDNotices, resetDNotices, addDNotice, generateDNotice, gameType } = useDMStore()
-  const [parent /* , enableAnimations */] = useAutoAnimate(/* optional config */)
+  const [parent] = useAutoAnimate()
+  const fileInput = useRef<HTMLInputElement>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
 
   return (
     <section className="flex flex-col w-full gap-6 p-6 border border-zinc-300 bg-white/[.01] dark:border-zinc-600 rounded-md text-zinc-900 dark:text-zinc-100">
+      <input
+        ref={fileInput}
+        type="file"
+        accept=".json,application/json"
+        className="hidden"
+        aria-label="导入击杀数据"
+        onChange={async event => {
+          const file = event.target.files?.[0]
+          event.target.value = ''
+          if (!file) return
+          try {
+            loadDNotices(await file.text())
+            addToast({ title: '加载成功' })
+          } catch (error) {
+            addToast({ title: '加载失败', description: error instanceof Error ? error.message : '无法读取文件', color: 'danger' })
+          }
+        }}
+      />
       <div className="flex flex-wrap items-start gap-2">
         <H3>击杀信息调整</H3>
         <Button size="sm" variant="flat" onPress={() => saveDNotices()} className="font-semibold gap-1">
           <Save size={14} />
           保存数据
         </Button>
-        <Button size="sm" variant="flat" onPress={() => loadDNotices('')} className="font-semibold gap-1">
+        <Button size="sm" variant="flat" onPress={() => fileInput.current?.click()} className="font-semibold gap-1">
           <Loader size={14} />
           加载数据
         </Button>
@@ -129,11 +150,14 @@ function DeathNoticePanel() {
           <RefreshCcw size={14} />
           恢复默认
         </Button>
-        <Button size="sm" color="primary" variant="flat" onPress={() => addDNotice(DefaultDeathMsg)} className="ml-auto font-semibold gap-1">
+        <Button size="sm" color="primary" variant="flat" onPress={() => addDNotice(gameType === 'cs2' ? DefaultDeathMsg : CStrikeDefaultDeathMsg)} className="ml-auto font-semibold gap-1">
           <Plus size={14} />
           添加
         </Button>
-        <Button size="sm" color="secondary" variant="flat" onPress={() => generateDNotice()} className="font-semibold gap-1">
+        <Button size="sm" color="secondary" variant="flat" isLoading={isGenerating} onPress={async () => {
+          setIsGenerating(true)
+          try { await generateDNotice() } finally { setIsGenerating(false) }
+        }} className="font-semibold gap-1">
           <Sparkles size={14} />
           生成击杀
         </Button>
@@ -159,7 +183,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
 
   return (
     <ul className="grid items-center grid-cols-1 gap-4 p-4 border dark:border-zinc-800 rounded-md md:grid-cols-6 dark:bg-zinc-900/50">
-      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
+      <li className="md:col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>击杀者</p>
         <div className="flex gap-2">
           <Input
@@ -173,7 +197,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
           <CampButton value={deathNotice.attackerCamp} onChange={camp => setDNotice(index, { ...deathNotice, attackerCamp: camp })} />
         </div>
       </li>
-      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
+      <li className="md:col-span-2 flex flex-col gap-1.5 flex-grow">
         <p className="w-full flex  items-center justify-between">受害者</p>
         <div className="flex gap-2">
           <Input
@@ -187,7 +211,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
           <CampButton value={deathNotice.victimCamp} onChange={camp => setDNotice(index, { ...deathNotice, victimCamp: camp })} />
         </div>
       </li>
-      <li className="col-span-2 flex flex-col gap-1.5 flex-grow">
+      <li className="md:col-span-2 flex flex-col gap-1.5 flex-grow">
         <p>武器</p>
         <div className="flex gap-3">
           <SelectSearch
@@ -198,9 +222,9 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
           />
         </div>
       </li>
-      <li className="col-span-4 flex flex-col gap-1.5">
+      <li className="md:col-span-4 flex flex-col gap-1.5">
         <p>图标</p>
-        <ul className="flex gap-2 rounded-lg">
+        <ul className="flex flex-wrap gap-2 rounded-lg">
           {PrefixIconValues.map(item => {
             const isSelected = deathNotice.prefixIcons.includes(item)
             return (
@@ -282,7 +306,7 @@ function DeathNoticeItem({ index, deathNotice, setDNotice }: DeathNoticeItemProp
           })}
         </ul>
       </li>
-      <li className="col-span-2 mt-auto ml-auto space-x-2 flex">
+      <li className="md:col-span-2 mt-auto ml-auto space-x-2 flex">
         <Button variant="flat" onPress={() => removeDNotice(index)} size="sm" className="font-semibold hover:bg-red-300 hover:text-white gap-1">
           <Trash2 size={14} />
           删除

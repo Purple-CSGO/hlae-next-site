@@ -41,15 +41,18 @@ export function Card({ title, url, desc, icon, version, background, download_cdn
             <H4 className="cursor-pointer hover:underline underline-offset-4 text-zinc-950 dark:text-zinc-200">{title}</H4>
           </Link>
           {version && (
-            <Tooltip content="查看更新日志" delay={500} closeDelay={800} placement="right">
-              <div
+            <Tooltip content="查看更新日志" isDisabled={!onVersionClick} delay={500} closeDelay={800} placement="right">
+              <button
+                type="button"
+                disabled={!onVersionClick}
+                aria-label={onVersionClick ? `查看 ${title} ${version} 更新日志` : undefined}
                 onClick={onVersionClick}
                 className={`transition px-1.5 text-xs flex items-center text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-200 bg-black/5 dark:bg-white/10 dark:border-white/10 rounded-lg tracking-wider max-w-fit max-h-fit ${
                   onVersionClick ? 'cursor-pointer hover:underline underline-offset-2' : ''
                 }`}
               >
                 {version}
-              </div>
+              </button>
             </Tooltip>
           )}
         </div>

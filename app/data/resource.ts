@@ -74,6 +74,15 @@ export const resourceData: CardProps[] = [
     icon: 'pi pi-github',
   },
   {
+    title: 'MulNX CS2',
+    github_repo: 'Co1Swet/MulNX_CS2',
+    url: 'https://github.com/Co1Swet/MulNX_CS2',
+    desc: 'CS2 GOTV / Demo 视觉制播工具，支持电影运镜、远程控制与实时 GUI',
+    background: true,
+    download_original: 'https://github.com/Co1Swet/MulNX_CS2/releases/latest',
+    icon: 'pi pi-video',
+  },
+  {
     title: 'nskinz',
     github_repo: 'advancedfx/nSkinz',
     url: 'https://github.com/advancedfx/nskinz',
