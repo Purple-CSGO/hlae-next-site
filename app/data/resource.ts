@@ -79,6 +79,7 @@ export const resourceData: CardProps[] = [
     url: 'https://github.com/Co1Swet/MulNX_CS2',
     desc: 'CS2 GOTV / Demo 视觉制播工具，支持电影运镜、远程控制与实时 GUI',
     background: true,
+    download_cdn: 'https://api.upup.cool/repo/Co1Swet/MulNX_CS2/&&&&.7z',
     download_original: 'https://github.com/Co1Swet/MulNX_CS2/releases/latest',
     icon: 'pi pi-video',
   },
